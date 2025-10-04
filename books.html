@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cobalt Web</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="Images/icon.png">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0ea5e9',
+            dark: '#0f172a',
+            minecraft: '#4CAF50',
+            gold: '#FFD700'
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      scroll-behavior: smooth;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f1f5f9;
+    }
+  
+    .scrolled {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .feature-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.3);
+    }
+    
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #0ea5e9, #0284c7, #0ea5e9);
+      z-index: -1;
+      border-radius: 14px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+    
+    .btn-download {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+    }
+    
+    .btn-download:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
+    }
+    
+    .btn-download:active {
+      transform: translateY(1px);
+    }
+    
+    .glow {
+      text-shadow: 0 0 15px rgba(14, 165, 233, 0.7);
+    }
+
+    .feature-card:hover .bot-icon {
+      transform: scale(1.1);
+    }
+    
+    .grid-pattern {
+      background-image: 
+        linear-gradient(rgba(14, 165, 233, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14, 165, 233, 0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    
+    .book-header {
+      transition: all 0.3s ease;
+      background: rgba(30, 41, 59, 0.7);
+      border-left: 4px solid #0ea5e9;
+    }
+    
+    .book-header:hover {
+      background: rgba(30, 41, 59, 0.9);
+      border-left-color: #38bdf8;
+    }
+    
+    .book-content {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .book-item[open] .book-content {
+      border-color: rgba(14, 165, 233, 0.5);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-call {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      color: white;
+      text-align: center;
+    }
+    
+    .btn-call:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
+    }
+    
+    .btn-call:active {
+      transform: translateY(1px);
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .badge-primary {
+      background: rgba(14, 165, 233, 0.2);
+      color: #0ea5e9;
+    }
+    
+    .badge-success {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+    }
+    
+    .badge-warning {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+    
+    .badge-purple {
+      background: rgba(139, 92, 246, 0.2);
+      color: #8b5cf6;
+    }
+    
+    .badge-danger {
+      background: #ef4444;
+      color: white;
+    }
+    
+    .book-icon {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+    }
+    
+    .stats-card {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+    }
+    
+    .book-item {
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+    
+    .book-item[open] .book-header .chevron {
+      transform: rotate(180deg);
+    }
+    
+    .book-header .chevron {
+      transition: transform 0.3s ease;
+    }
+    
+    .category-title {
+      position: relative;
+      padding-left: 1rem;
+    }
+    
+    .category-title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #0ea5e9;
+      border-radius: 2px;
+    }
+    
+    .book-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    
+    .book-actions .btn-call {
+      flex: 1;
+      min-width: 120px;
+      max-width: 180px;
+    }
+    
+    @media (max-width: 640px) {
+      .book-actions {
+        flex-direction: column;
+      }
+      .book-actions .btn-call {
+        min-width: 100%;
+        max-width: 100%;
+      }
+    }
+    
+    .guide-card {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .favorite-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.25rem;
+      transition: all 0.3s ease;
+      padding: 0.5rem;
+    }
+    
+    .favorite-btn .star-icon {
+      color: #9ca3af;
+      transition: all 0.3s ease;
+    }
+    
+    .favorite-btn.active .star-icon {
+      color: #FFD700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    }
+    
+    .favorite-btn:hover .star-icon {
+      transform: scale(1.2);
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .favorite-section {
+      display: none;
+    }
+    
+    .favorite-section.active {
+      display: block;
+    }
+    
+    .favorite-empty {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(30, 41, 59, 0.5);
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .favorite-empty i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #FFD700;
+    }
+    
+    .active-tab {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      color: white;
+      border-radius: 0.25rem;
+    }
+    
+    .favorites-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+
+  <section class="py-16 px-4 relative">
+    <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-dark to-transparent z-0"></div>
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="col-span-1 md:col-span-2 lg:col-span-4">
+          <div class="guide-card" data-aos="fade-up">
+            <div class="text-center">
+              <h3 class="text-xl font-bold mb-4 text-white">Библиотека Cobalt</h3>
+              <div class="flex flex-wrap justify-center gap-4">
+                <a href="read_books.html" class="btn-download text-white py-3 px-6 rounded-lg text-base font-semibold">
+                  <i class="fas fa-wrench tool-icon mr-2"></i>Подготовка книги
+                </a>
+                <a href="https://t.me/sun_community_chat/10053" class="btn-download text-white py-3 px-6 rounded-lg text-base font-semibold">
+                  <i class="fas fa-book mr-2"></i>Предложить книгу
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-span-1 md:col-span-2 lg:col-span-4">
+          <div class="flex border-b border-white-700 mb-2">
+            <button id="allBooksTab" class="px-4 py-2 font-medium text-white active-tab">
+              <i class="fas fa-book mr-2"></i>Все книги
+            </button>
+            <button id="favoritesTab" class="px-4 py-2 font-medium text-white-400 hover:text-white">
+              <i class="fas fa-star mr-2"></i>Избранное
+            </button>
+          </div>
+        </div>
+        
+        <div id="allBooksSection" class="col-span-1 md:col-span-2 lg:col-span-4">
+          <section class="max-w-4xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+              Истории
+            </h2>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book302753520">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Потерянный</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: cava138</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book302753520">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  День 1. А? Что? где я?! Я оказался в каком-то подвале. В нём было как-то душно. Не знаю как описать словами. Я встал и решил осмотрется. Там было две бочки в одной была еда - пара морковок, а во второй - меч. Надеюсь он мне не пригодится. День 2. После того, как осмотрелся, я решил поспать. Съел морковь. Сегодня планирую найти выход отсюда. Я встал и пошёл в соседнюю комнату. Там я встретил кота. Он весь дрожал от голода. Я к нему осторожно подошёл, протянул руку и дал кусочек мяса, который нашёл в бочке рядом с ним. Кот проглотил кусочек, даже не заметив, и стал относится ко мне несколько добрее. Он увязался за мной, а я пошёл дальше. Нашёл эту книгу, в которой пишу этот дневник. День 3. Я пошёл дальше. Вдрг, увидел ОГРОМНОГО МОНСТРА, КОТОРЫЙ СО ВСЕЙ ПРЫТИ БЕЖАЛ НА МЕНЯ!!! Он был огромный весь в каких-то кристалах и с молотом. Сперва я растерялся, но собравшись, побежал к нему. Как ни странно, он был грозный, но тупой. Я его обводил и убил. С монстра выпали какие-то частитцы. Я не обратил на них особого внимания и пошёл дальше. Наконец-то нашёл выход наверх. Я вылез и опять увидел монстров. Они были меньше и слабее. Я их убил и с них тоже выпали эти частитцы. День 10. Ох, давно я сюда ничего не писал. За это время много чего произошло. Я нашёл домик и в нём - пистолет макарова! Он мне очень пригодился. В доме этих тварей столько, что мечом их всех не перебить. Ещё через 2 дня я наткнулся на город!  В нём были жители, которые меня не пустили в город. Но, впринципе, это было ожидаемо. Какой человек в здравом уме пригласит к себе незнакомца с пистолетом? Жители сказали, что если я принесу им им еды, то они меня, всё же, впустят. Это меня очень воодушивило Я отправился на поиски ягоды, грибов или чего-то похожего. Спустя пару часов я нашёл два сорта ягод и насобирал корзинку грибов. Вернулся к людям и они, как и обещали, меня впустили! У нихбыло так уютно, но страшно, потому-что по периметру города    стояли башни с лучниками и рыцарями. Правда, весьма дружелюбными. Я гулял по городу, улыбаясь прохожим, а те, в свою очередь, улыбались мне в ответ. Всё казалось очень спокойным и умиротворённым. Я шёл в сторону таверны, чтобы арендовать комнату и хорошенько выспаться. Вдали виднелся силуэт человека, пристально наблюдавшего за мной. От этого по спине, временами, пробегал холодок. У самого входа в таверну я наткнулся на главу гильдии охотников. Тот посоветовал не выходить на улицу после 18:00. Оказалось в городе введён комендантский час. Но по какой причине? Жители избегали ответа на этот вопрос. Странно. Я просто обязан выяснить всё до мельчайших подробностей. Я зашёл в таверну, вручил торговцу мешочек, номиналом в 4 золотых, и тот любезно показал мне мои апартаменты на предстоящую неделю. Дождавшись темноты, я достал из сумки плащ. Осмотревшись из окна - решился выйти. Меня всё так же не покидало ощущение, будто за мной кто-то наблюдает. По всему городу были выставлены караульные копейщики, а по дорогам курсировали патрули, оснащённые арбалетами. Пришлось вспомнить всё, чему меня учили. Я пробирался к церкви через кусты и высокую траву вдоль каменистых дорожек. Вдруг, один патрульный всполошился, жестом позвал с собой двух копейщиков и куда-то ломанулся со всех ног. Началось, подумал я. Решил за ними проследить. Они пошли в какую-то  пещеру. В ней все стены были в каких-то шипах. Жители шли в глубь пещеры и привели меня к какой-то базе. Я спрятался за камнем и продолжил наблюдать. Прямо на моих глазах начался какой-то странный ритуал. Это суеверие? Вокруг меня задрожали стены. Жители рассупились и я увидел, как из воронки вылезает такой же монстр, что я убил неделю назад. Так вот в чём дело - подумал я, и почувствовал как со спины кто-то подошёл. Всё же, чувства не подвели... За мной наблюдали...  
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book302753520">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book302753520" data-title="Потерянный">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book302753520">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book314053508">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Глава 1 начало</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: DimonLemon</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book314053508">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Привет мой дневник сегодня я узнал что люблю утку 2день:127 не послушал и лишился дома лишился вещей в прочем всё что было его стало наше 3день меня чуть не убили я стырил 1 эндэр жемчуг 5 медных блоков и забыл ладно это конец 3дня 4день пришёл соникглеб я живу в его доме и он переехал он дал компас которовый ведёт к его дому и мне не нравится он... 5день к нам пришол диван друг наверно утки но и беда пришла я потерял важные ресы чёрт... 6день мы заключили зделку с другим домом мы им помогаем а они нам еду чтож я отомстил за пса роме ну и убивал много раз рому потому что он дебилойд и нихера не понимает чтож что насчёт подруги утки так она крутая и норм подруга секрет не кому не говорит чтож мы враги с 127 и мы его отхуячили как следует утка и волчиха помогали тоже в этом событии 7день у нас новенький это Алиса клан не выбран пока что рома чуть не убил моего пса я ему пизды дал надеюсь он понял что натворил мне выдали штраф опятт... я сказал мне чо тебе сексом оплачивать?! дам... я отдал тортики утке но она как сказала псих за 100 лет рома сходил в гости ко мне 8день она написала что я им не друг чтож мне пофиг...
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book314053508">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book314053508" data-title="Глава 1 начало">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book314053508">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book742918723">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Глава 2 Переезд</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: DimonLemon</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book742918723">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  9день мы переехали к найсику в деревню начинаем делать домик потолок оставим землёй чтож буду делать ферму я а то кому это надо дам... незнаю насчёт энда но в ад мы пойдём а в энд фиг знаю повезёт нет незнаю чтож мы торговали и 4 эндер жемчуга неплохо... и ещё я полюбил Алису пришол рома тот который дебилойд из 1 главы рома и впрада дебилойд тресёт жопой пришол хлеб мой браток я жрал его братьев хлеб их зовут а хлеб норм чел а рома... ДЕБИЛОЙД рома надо красным было написать и пришол гава гава если чо мой друг 2 акк тиктокер от ещё тормознутый чтож к нам в гости зашла соседка наверно нет она не соседка но новенькая это Алина звучит как Алиса ток Алина ито новенькая я буду менять потол ок что ж начало положено чтож не которые спрашивают я гей? но этот ответ будет в главе 3 ???? вы сами узнаете главу 3 планируются 12 глав но а вдруг нет надеюсь 12 будет????? чёрт я хочу жрать;-; шучу я всегда ем на 24/7 Конец?
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book742918723">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book742918723" data-title="Глава 2 переезд">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book742918723">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book201908127">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Глава 3 Новый дом</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: DimonLemon</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book201908127">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  10день эх так хорошо теперь жить а то прошлые подруги мен бросили но мне пофигу она серавно была неадекват а её подруга адекват ден взорвал нам хату и я расказал найсику найсик убъёт де на теперь кста найсик пришёл и голод тоже пришёл дам ден тоже как рома дебилойд лан рома теперь надеюсь понял что он делает а если нет ему пипец 11день чтож я зделал бокалы для пива и зделал кровати для девочек  и нас с братанчиком фермером как я но мы фиговые фермеры и то под землёй и то ничего не хватает ленивые дам... как в энд идти если мы такие? Но не чо мы справимся у нас есть найсик и хлеб а они та братаны мне гава начал мне угрожать баном что типо админ меня забанит дам таких я глупостей не слышал за 100 лет я слышал настоящие баны и то так было на других сервах и он думает что без скринов кто то ему поверит 12день хм стукнул день последний книги вау так неожиданно дождик я буду делать потолок а то как бомжи-_- скоро будет 13день невезучий день там наверно булет глава 4 а вот это я вам не скажу)  
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book201908127">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book201908127" data-title="Глава 3 новый дом">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book201908127">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book444104042">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Глава 4 Странный день</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: DimonLemon</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book444104042">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Напоминает день пятницу 13 джейсон вурхиз отсылка к фильму но всё идёт норм и мне хотят построить дом для письма наверно я там буду писать но я буду выходить мне это нужно у меня пёс в мини доме нашем к нам прищёл бибоп и он мир на базе найсика наверно в 5 главе мне достроят дом а то и в 6 может если я буду всё писать подряд я отдал нытику гаве его алмазный фул сет шас ночь и я просто смотрю на голову дивана отлично... а сам он вышел походу инет плох к нам пришли госто фантомы о нет... меня волнует вопрос а где все остальные игроки? к нам пришёл игрок максдемон я не знаю кто он но он мне не нравится сейчас сижу у костра и думаю а что если я не смогу попасть в ад из за дома? а мне надо закончить 12 книгу очень надо и наче зачем так жить зачем? неважно важно что меня найсик приютил в деревню его а то я бы пропал довно бы и то 1 дом у меня будет и 2 работа моя писатель глав ладно 14день диван стал агентом -_- это оооооочеееееень странноооооо пипец как странно мне нравится тут жить я вот мэра не видел наверно его нету я  незнаю наверно это конец
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book444104042">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book444104042" data-title="Глава 4 странный день">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book444104042">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book565187594">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Дневник вызывателя гропах</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Вызыватель Гропах</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book565187594">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  День 1337: Дорогой дневник! Сегодня утром я обнаружил пропажу тотема. До сих пор не могу поверить, что подобное могло произойти со мной... Скорее всего потерял, когда вчера вечером убегал от напившегося кумыса игрока в донатерской броне. Где мне его теперь искать? Это был мой последний тотем! Придётся сделать новый... Нужно только вспомнить рецепт крафта... 
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book565187594">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book565187594" data-title="Дневник вызывателя Гропах">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book565187594">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+           <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book834085761">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Мурамаса</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: FoxyLehaFlower</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book834085761">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+            
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Эта мурамаса была сделана одним человеком. Он был недругом для своего соседа, до тех пор пока они не встретили общего врага. Что-бы его победить они объеденились и простили друг друга за все плохое. После победы над сущим злом, лезвие меча стало белым, а не черным.   
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book834085761">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book834085761" data-title="Мурамаса">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book834085761">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book130139913">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Me and my war</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Ferrum_So4</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book130139913">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Me and my war Before story begin Is it such a sin Tell who i and what's mine 'Til server' ends time? Before story ends I wanna tell to frends How live without fights 'Til world's end night. Глава 1. Начало. всё началось как выживание на обычном сервере, и ничего не предвещало беды. Сервер жил своим чередом и , внезапно для самого себя, я обнаружил себя в нём. Понятия не имею, почему я выбрал 3 года назад именно его, но теперь я не  смогу выбросить его из головы. Этот мир был столь же девственен и прекрасен, сколь сейчас. Различия можно было увидеть в небольших, но важных деталях. Множества мобов и кастомных предметов не было, тотемы всё ещё можно было выбить из эвокера, и, что самое важное для меня, на спавне стояли красивые постройки-магазины. А не этот голем. В общем. На сервере была тихая и спокойная жизнь, которую было сложно прервать. но однажды всё изменилось, по крайней мере, для меня. Эту историю я  и хочу вам поведать. Глава 2. Начало конца Как я и сказал, непорпавимые изменения сервера для меня начались ещё до введений, они начались с игроков. множество игроков, которых  я считал спокойными, оказались теми ещё чертями в тихом  омуте, и множество моих друзей, среди которых были  Гитлер и рандев (худшие из лучших гриферов сервера). Первый обокрал меня после "случайного" взрыва крипера, забрав всё, что у меня было. озлобившись после этого на весь мир, я ушёл на дальние  координаты и стал выкапывать там чанки, чтобы заглушить свою боль. В итоге, я создал свою базу на выкопаном чанке, полностью обустроив её для себя и создав небольшой мирок, в котором я жил до начала 2022 года, когда я не обнаружил первые глобальные  изменения на сервере... Глава 3. Всё лучшее - лучшим. резкие для меня изменения - вывод выбивания тотемов, кастомные мобы, страдания игроков, кто не подготовлен - всё это одновремено ужаснуло и заворожило меня.  Сейчас условные волколаки, баргесты никого не удивляют, Но в самом начале их существования они поражали и разачаровывали, радовали и пугали одновременно. Разачаровывали они в основном только меня - только сильные могли помирться с их силой ,но это и логично- сильное вооружение сильным игрокам. Глава 4. И что же в итоге? честно говоря, я всё ещё люблю Кубач. Его ванильность уже давно в забытьи, кастом затмил даже незерит, но чего в этом плохого? Даже я не чувствую сильных разниц между слоями сервера, которые, если честно, всё сильнее разделяются с приходом новой крови новичков. Эпилог. Что же ещё может принести нам Кубач? Что ещё я могу вам рассказать? Ответы на эти вопросы может дать только одна вещь- время, ко торое у нас всех ограничено, но я не против рассказать вам и других историй. 
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book130139913">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book130139913" data-title="Me and my war">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book130139913">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book800958968">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Предыстория</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: ktotakayasanya</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book800958968">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Предыстория. Несколько тысяч лет назад на этих землях проживала  развитая цивилизация, которая таинственным образом резко прекратила свое существование. Современная группа исследователей направилась в данный регион, чтобы установить причины их быстрого и стремительного развития и такого же быстрого исчезновения.
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book800958968">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book800958968" data-title="Предыстория">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book800958968">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+          </section>
+            
+          <section class="max-w-4xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+              Биографии
+            </h2>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book445467628">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Автобиографии игроков Кубача</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: UberBaifo1</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book445467628">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Издание Uberbaifo1 "Информация о почти каждом активном игроке на кубаче"я сделал опрос игроков, и вот какую информацию я получил: swith_off2 любит алмазы любит мороженку Говорит что бывает глуп Строитель. Minecartik_14 Любит приятных и ламповых игроков Любит свободное время и побыть в одиночестве Характеристика себя по её словам: Нейтральная Предпочитает строительство. saveliy Любит иметь власть над теми кто ниже его по статусу (в игре) Любит покупать одежду (в жизни) Характеристика себя по его словам: Целеустремительный Предпочитает строительство больше, чем пвп. 12324852 Любит свой бур (на сервере) Любит футбол (в жизни) Характеристика себя по словам: Целеустремленный и неуступчивый Предпочитает строительство больше чем пвп. Xentrum Любит фермерство (на сервере) Любит играть на телефоне (в реальной жизни) Характеристика себя по словам: Токсичный, но добряк. Предпочитает пвп больше, чем строительство. VIP_ Любит кастом (на сервере) Любит спать (в жизни) Характеристика себя на словах: Спокойный, но бывает надоедлив и жаден Склонный и  к строительству и к пвп. Molik2345 Любит незер бронь (на сервере) Любит молоко (в жизни) Характеристика себя на словах: ленивый и спокойный Предпочитает строительство больше чем пвп.
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book445467628">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book445467628" data-title="Автобиографии игроков Кубача">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book445467628">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+
+          <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book208721704">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">История игрока ktotakayasanya</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: ktotakayasanya</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book208721704">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Глава 1. 15 Июня. С Чего Обычно Начинают Книги? Наверное, Стоит С Самого Начала, С Того, Что Привело К Тому, Что Ты, Да-да Ты, Мой Дорогой Друг, Читаешь Эту Книгу!  Я Саня, Мне 19 Лет И По Вечерам Я Часто Играю В Майнкрафт. Одна. Я Привыкла Создавать По 100 Разных Миров, Строить Что-то Уютное Для Себя, Постоянно Переключаться На Мирный Режим, Так Как Жутко Боюсь Зомби, Скелетов И Других Страшных Дядек.  Никогда Не Убивала Эндер Дракона И Никогда Не Заходила В Мультиплеер.  Но 15 Июня Все Изменилось. Как Обычно Я Зашла В Майнкрафт, Но Вместо Привычного «создать Новый Мир», Курсор, Словно Сам, Навел На Сетевую Игру.  Среди Многих Других Серверов, Почему-то Я Зашла Именно На Кубач, Наверное, Зацепила Смешнявская Картинка И Подпись. Так И Началась Моя История Здесь, На Кубаче.  Я Не Планировала Задерживаться На Сервере, Так Как Не Привыкла К Этому, А Просто Хотела Убить Время И Попробовать Что-то Новое. «пару Дней Поиграю, Построю Дом, Найду Алмазы И Все». Так В Принципе Заканчивалась Любая Моя Игра В Одиночном Мире. Но Как Ты Понимаешь, Что-то Пошло Не Так…  Первый Раз Зашла, Поздоровалась, Сказала, Что Первый Раз Играю На Сервере, Но Со Спавна Выбежать Не Удалось. Назрел Очевидный Вопрос: «как Начать Выживать В Этом Мире?» Нашел Свой Очевидный Ответ: «/rtp» От Игрока С Ником 1nd1. Ко Мне Тогда Присоединился Другой Игрок, Если Мне Не Изменяет Память, То Это Был Merlinter. Как Потом Станет Ясно, Что Он Очень (очень) Любит Ягоды.  Именно В Этот День На Сервер Решили Совершить Дудос Атаку, Я Вылетала Каждые 5 Минут. «возможно Это Знак, Что Пора Выходить?» - Подумала Тогда Я. Эта Атака Вынудила Меня Искать Другие Ресурсы Сервера, Так Я Нашла Дискорд Кубача.  Спустя Долгое Время Скитаний По Миру, Мною Все-таки Был Найден Райский Уголок Для Жизни. Рядом Было Небольшое Озеро, Поляна, Окруженная С Одной Стороны Лесом, А С Другой Холмами. Решено - Строим Дом Здесь!  Практически В Гордой Тишине Я Начала Строительство Своего Гнездышка, Когда Ко Мне С Запросом Телепорта Постучался Тот Самый 1nd1. Я Была Рада, Что Кто-то Хочет Со Мной Играть И Быстро Приняла Телепорт.  Первая Встреча Ознаменовалась Подарком, Игрок, Имени Которого Я Еще Не Знала Принес 2 Шалкера (слово Шалкер Я Тоже Увидела Впервые) С Разными Понятными И Не Очень Мне Вещами. Его Фраза «на Первое Время Для Развития, Надеюсь Хватит» Получила Мой Шуточный Ответ «на Этом Можно Заканчивать Игру». Ведь И Вправду, Такие Ресурсы Я Видела Впервые И Даже Не Знала Что С Ними Делать!  Близилась Первая Ночь, Строительство Шло Полным Ходом, Но Вот Незадача - Появились Враждебные Мобы…  Естественно Возможности Изменить Режим На Мирный Я Не Нашла, Поэтому Пришлось Обратиться За Помощью К 1nd1, Который Доблестно Убил Всех Монстров Вокруг Моего Домика. Здесь Я Почувствовала Себя Настоящей Девочкой, А Заодно Ощутила Преимущество Быть Девушкой В Майнкрафте! Так Этот Игрок Еще Пару Раз Навещал Меня В Одиночку, Наблюдал За Моим Строительством.  Вечером Того Же Дня Я Оказалась На Спавне, Я Хотела Прогуляться По Магазинам, Но Кто Же Знал, Что Нужна Внутрисерверная Валюта? Тогда 1nd1, Который Тоже Оказался На Спавне В Тот Момент,Заметил Лавочку Для Влюбленных. «это Для Тебя И Твоей Жены, Александры» - Сказал Игрок С Ником Sparkgon. Я И Мой Пока Неизвестный По Имени Герой 1nd1 Не Поняли, Когда Нас Успели Поженить, Но Я Решила Подыграть! А Что? Звучит Мило, Учитывая Обстоятельства Нашего Знакомства, Но Дима, Как Выяснилось Так Зовут Игрока 1nd1, Отрицал Наш Брак. Насильно Мил Не Будешь, Как Говорится. Спарк Много Шутил В Тот Вечер, А Игрок С Ником Fimpiff Также Смешно Отвечала Ему В Чате. Мне Очень Понравилось Общаться На Сервере, И, Наверное, Тогда Меня Посетила Мысль, Что Я Здесь Еще Задержусь… Строительство Дома Шло Полным Ходом, Когда Разговор Вновь Зашел О Нашем Браке С Димой, Тогда Fimpiff Попросила Телепортироваться К Ней Впервые….  «вот Ты Какая Оказывается, Жена Димы» - Сказала Она Тогда. Это Была Наша Первая Встреча, Тогда Мы Вдвоем Даже Не Подозревали Куда Зайдут Наши Отношения.  Тот Вечер Я Провела В Компании Димы, Фимы И Спарка. В Саратове Близилась Ночь И Подкрадывался Первый Экзамен. Глава 2. Что Было Дальше?  16 Июня Подкралось Также Незаметно Как И Экзамен По Мировой Экономике, Но Благо Он Был Успешно Сдан.  Не Теряя Времени, Я Быстренько Зашла В Майн, Уже Не В Одиночный Мир, А На Кубач. Странно, Как Один Проведенный Здесь День Повлиял На Меня. Хотелось Побыстрее Вновь Встретиться С Ребятами, Но Уверенности В Этом Не Было Никакой.  16 Июня Начался С Неудачи, Когда Я Воспользовавшись Rtp Переместилась К Огромному Дому В Лесу, Где Меня Со Всеми Ценными Ресурсами Убили Разбойники, О Которых Я, Естественно Не Знала, Но Теперь То Мне Известно, Что В Лесной Особняк Лучже Не Соваться. + 1 Фобия В Майне. Но 16 Июня Стал И Продуктивным Днем Строительства Моего Дома. Основное Здание Было Построено, Территория Для Животных И Фермерства, А Руки Уже Подошли К Строительству Мостика К Острову В Центре Озера. Но Вот Незадача, Что-то Пошло Не Так С Фонарями. Я Ставила Их, А Они Не Исчезали С Инвентаря, А Позже И Пропадали С Места. Бросив Клич Помощи В Общий Чат, Ко Мне На Помощь Вновь Пришел Дима, Начала Привыкать К Его Присутствию Рядом. Он Благополучно Мне Помог Решить Этот Баг, Но Уходить Он Не Спешил. Ему Понравился Мой Маленький Уютный Дом, Особенно Ванна (как Он Думал) На Заднем Дворе, Но Это Была Лишь Поилка Для Животных…  Тогда Увидев Наше Бурное Общение В Чате, И Мою Просьбу О Поводках, Ко Мне Впервые В Гости Заглянула Фима. Как Выяснилось, Что Ее Тоже Зовут Саша, А Я То Думала, Что Фима Вполне Реальное Имя! Ребятам Понравилось У Меня На Участке. Фима Залезала В Отверстие Между Потолком И Сундуком И Была Похожа На Муху, А Дима Охотился На Нее. Уже Тогда Стало Ясно, Что С Ней Игра Точно Не Будет Скучной!  Продолжился Наш День Закрыванием Димы В Компостницу, Саша Aka Фима Явно Ловила С Этого Нереальное Удовольствие… Но Нужно Было Строить Дальше! Так Я Начала Строить Портал В Ад, Когда Ребята Решили Устроить Пвп Прямо На Месте Стройки. Дима Бил Фиму, Фима Била Диму. У Этой Парочки Явно Долгая И Запутанная История…  «что Вы Не Поделили?» - Спросила Тогда Я И Получила Весьма Неожиданный Ответ От Фимы: «тебя». Тогда Я Впервые Призналась Ей В Любви: «фима, Я Твоя».  Наверное, Именно В Тот Момент Дима Начал Переживать За Титул Моего Неофициального Мужа. Но Он Обрел Новый «коровий Герой» Или «говяжий Спаситель», Когда Дал Мне Целую Кучу Кожи Для Рамок. Начинаю Чувствовать Себя Содержанкой…  Близился Вечер И К Нам Присоединился Спарк. Он Тоже Оценил Мой Скромный, Но Милый Дом И Начал Что-то Торопливо Строить На Площадке Перед Моим Домом.  Часы Бьют 00:00. «фима, С Днём Рождения» - Раздались Сообщения От Компании. Вот Это Да! Вовремя Я Присоединилась К Игре. Тогда Я Узнала, Что Фиме Оказывается 15 Лет, Хотя Я Думала, Что Она Старше.  Тогда Произошло Мое 2 Признание Ей В Любви.  «саша Не Любит Мелких» - Сказала Она Тогда. «я Люблю, Но Меня Посадят…но Я Готова Сидеть Всю Жизнь, Лишь Бы Ты Была Рядом» - Ответила Ей Я.  Мы Здорово Посидели Этой Ночью, Заявила, Что Тоже Хотела Бы Отметить С Ними Свой День Рождения, Тогда Впервые Появился Budka, Который Сказал, Что Все Будет Сделано По Фэн-шую. В Эту Ночь Я Даже Призналась Ребятам, Что Ожидала Увидеть На Сервере Только Конкретных Школьников, Но Никак Не Таких Замечательных Людей, Как Они.  Ну, А Завершался Второй День Закреплением За Мной Звания Местной Содержанки Подарком От Фимы В Виде Подмостков И От Димы В Виде Книг Для Чаровалки И Более Чем 13 Стаков Сосны… «сосну В Подарок». Что Ж Пора Включать Свои Горловые Навыки… Ой, Я Это Вслух… Глава 3. Ozk.  Новый День Моей Жизни На Сервере Начался Еще До Того, Как Я Зашла В Игру. Мне В Дискорд Написал Мой Неофициальный Муж, Дима.  Он Предложил Мне Вступить В Клан Ozk. Скинул Анкету И Попросил Подождать Решения Других Игроков. Как Ни Странно Я Согласилась На Эту Авантюру, Хотя Мои Навыки В Игре Оставляют Желать Лучшего, Но Я Была Рада, Что Меня Приняли В Серверное Сообщество И Позвали В Клан! На Удивление Ребята Быстро Ответили Согласием И Теперь Обо Мне Можно Говорить, Как Об Участнице Клана Ozk. Мне Еще Только Предстоит Познакомиться С Другими Игроками, Хотя, Забегая Вперед,Могу Сказать, Что До Сих Пор Некоторые Личности Остаются Для Меня «секретом».  Но Такая Радостная С Одной Стороны Новость, С Другой Оказалась Достаточно Грустной, Ведь Мне Предстоял Переезд Из Моего Уютного Гнездышка, Которое Просуществовало Лишь 2 Дня. Зайдя В Игру Дима Показал Мне Мой Новый Дом, Всё Что Там Было Так Это Холмистая Местность С Небольшой Лысой Горой, На Которой Я И Решила Строить Свой Новый Дом.  Неожиданно На Горизонте Появился Новый Игрок, Thekotic, Который Здорово Нас Напугал Своим Появлением. Но Он Явно Эффектен, Поняла Я Это, Когда Прямо Перед Нами Появился Невообразимых Размеров Зомби!  Друг, Ты Еще Помнишь, Что Я Боюсь Мобов?…  Но Опасность Вновь Миновала И Вновь Дима Выступил В Роли Моего Героя!  Отношения Котика И Димы Очень Занимательная Штука, Для Меня, Как Для Новенькой Было Забавно Услышать Следующий Диалог: Д: «ты Мне Кстати Помнишь Чу Обещал?» К: «секс?» Д: «ну, Это Тоже» К: «тогда Не Помню…»  Следующее Время, Пока Дима Решал Вопросы Со Своим Магазином, Я Провела С Фимой, Мы Впервые Долго Играли Вместе, Вдвоем. Я Отправилась На Поиски Незерита, Желая Наконец Хоть Что-то Сделать Самостоятельно, Но Плану Не Суждено Было Воплотиться. Так Мои Взрывные Кровати Были Заменены Мощным Динамитом Фимы, От Которого Она Заботливо Закрывала Меня Блоками. Так Как Спавн Портала Оказался Крайне Неудачным, А Способ Фимы По Добыче Незерита Весьма Хаотичным, То Мы Заблудились. Саша Тогда Сравнила Это С Побегом Из Саратова. Забавно, Но Ведь Оттуда Невозможно Сбежать…но Превозмогая Обрывы, Нападение Пиглинов На Фиму, И Мяукающего Гаста Мы Все-таки Вышли Наружу.  Отойдя Афк, Случился Интересный Диалог Фимы И Димы: Д: «а Саша Куды?» Ф: «она Афк, Соскучился?»  Тогда Дима Избежал Ответа, Явно Засмущавшись И В Который Раз, Отвергая Наш «брак», Хотя Намеки На Мою Верность Фиме Только Набирали Обороты, Но Это Диалог Точно Показался Мне Забавным. Пришло Время Переезжать, Фима Узнала О Моем Вступлении В Клан. На Горизонте Появился Спарк С Вопросом Для Димы «к Тебе Переезжает?», Который Поддержала Фима «реально К Тебе?» На Что Дима Мило Прорычал. Хотя В Реальности, Я Сама Выбрала Жить Поближе К Нему, Так Как Других Игроков Клана Я Еще Не Знала, А С Ним Мне Было Спокойнее.  Но Его Милота Закончилась На Моменте, Когда Он Сказал Фиме Доставать Тнт, Чтобы Взорвать Мой Старый Дом И Уйти Красиво. Фима Обложила И Меня Блоками Динамита, Тогда Я Знатно Испугалась, Но Это Был Лишь Тест На Доверие, Который Я Завалила. Фима Отметила, Что «дима Защищал Свою Сашулю». Так Мой Дом Превратился В Руины, А На Его Развалинах До Сих Пор Стоит Табличка «здесь Жила Ктотакаясаня». Возможно, Когда-нибудь, Когда Я Уже Не Буду Играть, До Нее Дойдет Совершенно Незнакомый Мне Игрок, Прочитает Эту Табличку И Уйдет, Не Подозревая, Какая Большая И Интересная История Здесь Когда-то Началась.  Телепортировавшись К Моему Новому Дому Случился Очередной Забавный Диалог: С: «фима, Разве Это Вид? Что Там Светится?» Ф: «димины Глаза При Виде Тебя!»  Так Я Начала Строительство Нового Дома Из Той Самой Подарочной Сосны…  Дима Наблюдал За Стройкой, А Пока Он Был Афк, Я Заперла Его В Земляной Тюрьме. Ну, А Что? Вдруг Убежит…  Дима И Фима Помогали Мне Ресурсами Для Строительства, Ну Как Помогали, Почти Полностью Ими Снабжали… Все-таки Я Содержанка, Пора Перестать Этого Стесняться...  Дима Решил Провести Мне Экскурсию По Старому Городу Ozk, Где Они Когда-то Жили Все Вместе, Что Показалось Мне Милым. Почему Сейчас Всё Не Так?  Я Была В Шоке Оттого, Какие Постройки  Ребята Там Возвели, Но Самое Интересное, Что Несознательно Дима Все-таки Затащил Меня В Церковь, Хотя Официального Венчания Так И Не Состоялось.  После Спарк Закрыл Меня В Комнате И Разделся, Кажется Он Хотел Меня Изнасиловать, Но Мне Удалось Сбежать!  Игрок С Ником Valli Появился Так Же Неожиданно, Как И Котик. Мы Уже Были Около Моего Нового Дома, Когда Он Пришел. «я Буду Жить В Этом Подвале» - Были Его Первые Слова.  Дима Потребовал Делать Двухместную Кровать, Чем Фима Была Явно Недовольна И Заявила О Моей Первой Измене.  Хотя Я Сказала, Что Построю Нам Отдельное Любовное Гнездышко. Кажется О Замужестве С Димой Уже Не Может Идти И Речи.  Вечер Мы Провели За Милой Беседой, Узнавали Кто Где Живет, Рост И Вес Друг Друга, Сопровождая Это Все Шутками. Глава 4. Помурчишь В Дискордик? Кубач Стал По-настоящему Новой Зависимостью, На Ряду С Татуировками И Никотиновой Зависимостью.  Так Как Учеба Уже Закончилась И Оставалось Только Сдать Экзамены, Время На Подготовку К Которым Я Тратить Не Хотела, Я Бежала В Майнкрафт Как Можно Раньше.  Этот День Был Затишьем Перед Бурей, О Которой Я Расскажу Позже, Если Ты Забыл, Дорогой Друг. Я Начала Строить Башню, Как Станет Позже Ясно - Самое Высокое Из Моих Зданий. Фима Помогала Ресурсами, А Мне Стало Ясно, Что Строительство Точно Не Закончится Одним Днём.  В Этот День Я Официально Стала Членом Клана Ozk, Игрок С Ником Amazonka, Чье Настоящее Имя До Сих Пор Остается Загадкой, Добавила Меня В Состав Клана В Самой Игре. За Все Время Своей Игры Я Не Успела Сблизиться С Амой, Но Думаю, Что Я Еще Успею Это Сделать, Всё-таки Мы В Одном Клане! С Официальным Приглашением И Пришло Чувство Того, Что Теперь Просто Так Не Уйти. В Любом Случае, Как Мне Кажется, Оставить След В Истории Кубача, Клана Или На Крайний Случай Других Игроков У Меня Точно Получится! Очередной Приход Димы Ко Мне Домой В Этот Раз Не Вызвал Хороших Эмоций, Ведь Начался Он Со Слов: «ты Же Враждебных Мобов Боишься?»  Огда Я Последовала За Ним И Оказалась В Страшной Пещере, Откуда Со Всех Щелей Доносились Страшные И Пугающие Звуки, А После Появился И Страшный Дядька, Который В Народе Зовут Варден. Продолжился День Тем, Что Соклановцы Буквально Надавили Меня, Чтобы Я Зашла В Дискорд. Как Достаточно Скромный Человек, А К Тому Же Нелюбящий Говорить По Телефону, Для Меня Это Стало Самой Настоящей Пыткой, Но На Мое Удивление Я Быстро Привыкла К Ребятам И Даже Услышала Стонущего Угля.  В Тот День Я Рассказала Им Одну Неприятную Деталь Моей Биографии И После Этого, Словно Запустила Их В Свою Жизнь Окончательно. Так Я И Уснула Под Шум Говорящих В Дискорде Ребят. Глава 5. А Начиналось Так Красиво. День Начался В Буквальном Смысле Без Штанов, Которые Магическим Образом Куда-то Делись, А Заметила Я Это Благодаря Фиме, Которая Любезно Поинтересовалась: «где Штаны Потеряла? Кто Их С Тебя Снял?»  Единственное, Что Помню Так Это То, Что Была В Последний Раз С Углем, И По Всей Видимости Он Их С Меня И Снял… Спарк Тогда Отпустил Шутку: «саня Теряет Трусики При Виде Угля!»  Так Мы Заключили, Что Я Люблю «помладше» И Именно Поэтому Мне Так Понравилась Фима. Строительство Самой Высокой Постройки В Моем, Скажем Так, Поселке Продолжалась, Наконец Кончилась Сосна, Которую Дарил Дима. Пришлось Заниматься Ее Добычей Самостоятельно. Как Я И Говорила Ранее Последние Дни Были Лишь Затишьем Перед Бурей, Которая Случалась 19 Июня, Спустя 4 Дня После Моего Начала На Кубаче.  В Этот День Все Были В Приподнятом Настроении, Отпускали Весьма Колкие Шутки, Так Взаимные Подколы Переросли В Мой Личный Ад.  Я Как Человек, Который Всеми Силами Цепляется За Любых Людей, По-настоящему Была Расстроена И Почти Плакала.  Я Построила Надпись: «я <3 Фиму», Тогда В Дискорде Дима Спросил: «надпись Из Дерева, Потому Что Считаешь Фиму Доской?». Так Дима Сказал В Игровом Чате, Что Я Считаю Фиму Доской, На Что, Естественно, Фима Расстроилась И Обиделась. Тогда Же Дима И Компания Решили Зачеркнуть Сердечко, А Потом И Вовсе Поджечь Надпись.  Мое Хрупкое Сердечко Чуть Не Раскололось На Тысячу Мелких Осколков. «как Мой Рыцарь Превратился В Злодея?». С Тех Пор Он Больше Не Звал Меня Ласково «сашенька», А На Замену Пришло Грубое «жопа».  Тогда В Попытках Помириться Я В Первые Сделала Предложение Фиме Стать Моей Женой, Но Получила Отказ.  В Расстроенных Чувствах, Полной Груди Грусти Я Написала Прощальную Записку, Что Больше Не Буду Играть На Сервере, Ведь От Моих Действий Всем Плохо И Все Ссорятся. Спарк Передал Записку Фиме, Тогда Она Убедила Меня Вернуться И Всё Наладилось.  Потом Мы Вместе Со Спарком И Фимой Ловили Черепашек, Размножали Их. Огда Я Прыгнула На Черепашье Яйцо, А Спарк Вежливо Поинтересовался: «кто Мне На Яйца Прыгнет?». Надеюсь Этого Мы Никогда Не Узнаем.  В Завершении Дня Спарк Сделал Мне Подарок, Синего Попугайчика, Которых Живет Со Мной С Тех Самых Времен. Глава 6. А Что Было Дальше?  А Дальше Было Много Всего Интересного И Не Очень. Ссоры, Разборки, Смешные И Грустные Вечера В Дискорде С Фимой И Ozk, Строительство Целого Поселка Вокруг Моего Дома, Моя Ревность К Игроку С Ником Дафна, Которая Собственно И Заложила Любовь К Написанию Книг, А Также Женитьба С Фимой, Открытие Моего Магазина, Возвращение Спарка На Сервер, Подарки От Друзей, Ловля Аксолотлей С Димой И Валей И Много Много Всего. К Сожалению Или К Счастью Я Закончу Лишь На Одном Томе Книге, Ведь В Противном Случае Она Могла Бы Быть Бесконечной. Послесловие.  Дорогой Друг, Если Ты Прочел Эту Книгу, То Знай - Ты Мне Очень Дорог, Я Ценю И Люблю Тебя Всем Сердцем.  Возможно, Книга Покажется Тебе Слегка Драматичной И Преувеличенной, Но Я На Самом Деле Проживала Каждый День Именно Так.  Не Все Детали Нашей Истории Изложены, Хотя За Эти 2 Месяца Их Набралось Приличное Количество, Но Кто Знает, Возможно, Однажды Выйдет Продолжение, Где Я Напишу Больше О Своем Любимом Мальчике Valli, О Добром Чертенке, Богатом Арабе И Его Дубаях И Загадочной Аме?  Ну, А Пока, Делюсь Откровением, Что Майнкрафт С Каждым Днём Становится Все Рутиннее И Грустнее, Мы Уже Не Собираемся Так Как Раньше, Пропал Энтузиазм, А Желание Играть Уменьшается, Но Пока Я Здесь, Цепляюсь За Наше С Тобой Общение.  P.S Спасибо За То, Что Ты Есть И Прочел Мою Писанину. Я Люблю Тебя!
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book208721704">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book208721704" data-title="История игрока ktotakayasanya">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book208721704">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book179538914">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Прощание.....</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: ktotakayasanya</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book179538914">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Предсмертная записка сани. Я больше не могу играть на сервере, где меня подставили, унизили, растоптали и смешали с говном. По вине n-молодых и не очень людей на меня обиделась любовь всей моей жизни... Мне даже все равно, что унизили меня, они унизили в первую очередь Фиму! Я ухожу... 
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book179538914">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book179538914" data-title="Прощание....">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book179538914">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+          </section>
+          
+          <section class="max-w-4xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+              Религия
+            </h2>
+            
+          <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book265164901">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Библия</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Felok</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book265164901">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Да сохранит вас эта книга от всевышего зла! Пусть Брих и его подченёные только попробуют прекаснутся к вам! Пусть в любом измерение вы чуствовали себя как дома и некто вам не мог преченить вреда. Чтоб вы цеплялись за ниточки жизни когда кажется что вы умрёте и не огонь не вода не огонь не могли вам нанести вреда!
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book265164901">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book265164901" data-title="Библия">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book265164901">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+          </details>
+        </section>
+
+        <section class="max-w-4xl mx-auto px-4 py-8">
+          <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+            Рецепты
+          </h2>
+
+          <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book249314229">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Напиток Сок</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: M1rotvorets_</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book249314229">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Напиток Сок: Ингредиенты сока: Сладкие ягоды - 25ш Свет. ягоды - 6ш Сахар - 11ш Ферментация - 6м Дистиляция - 4 раза Выдержка - 13м Уровень сложности: 6
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book249314229">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book249314229" data-title="Напиток Сок">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book249314229">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+          </details>
+
+          <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book853171465">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Напиток Шампанское</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Samovarium</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book853171465">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Подсказки к рецепту Ферментация: 3-12 Дистиляция: 2 раза Ингриденты: *Светящиеся ягоды - 1-5 Сахар- 3-10 Порох - х ххххххх - 5 (ВСЕ ОТВЕТЫ НАХОДЯТСЯ В ЭТОЙ КНИГЕ) Сложность приготовления: 4 Эффекты: *-Попадешь в вытрезвитель **-Увидешь себя в 1ого января ***-Выходишь из вытрезвителя
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book853171465">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book853171465" data-title="Напиток Шампанское">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book853171465">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+          </details>
+
+          <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book568310184">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Напиток Дедагон</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Samovarium</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book568310184">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Рецепт: ххххх - 5-8 Золотое Яблоко - 3-6 Пшеница - х Прогоняем 6 раз *-Убивает **-Баф ***-Блольший бафф
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book568310184">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book568310184" data-title="Напиток Дедагон">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book568310184">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+          </details>
+         </section>
+
+        <section class="max-w-4xl mx-auto px-4 py-8">
+          <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+            Зачарования
+          </h2>
+
+          <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book200610596">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Зачары на оружие</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: M1rotvorets_</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book200610596">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Меч: Отдача 2 Добыча 3 Заговор огня 2 Острота 5 Починка Прочность 3 Лук: Починка Прочность 3 Воспламение Откидывание 2 Сила 5 Булава: Починка Прочность 3 Плотность 5 Порыв ветра 3 Пробитие 4 Трезубец: Громорвежец Верность 3 Прочность 3 Починка Арбалет: Прочность 3 Починка Быстрая перезарядка 3 Пронзающая стрела 4
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book200610596">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book200610596" data-title="Зачары на оружие">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book200610596">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+          </details>
+
+          <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book693209819">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Зачары на броню</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: M1rotvorets_</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book693209819">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Шлем: Защита 4 Прочность 3 Починка Шипы 3 Подводник Подводное дыхание 3 Нагрудник: Защита 4 Шипы 3 Прочность 3 Починка Штаны: Шипы 3 Починка Защита 4 Прочность 3 Проворство 3 Ботинки: Невесомость 5 Починка Шипы 3 Защита 4 Подводная ходьба 3 Скорость души 3
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book693209819">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book693209819" data-title="Зачары на броню">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book693209819">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+          </details>
+        </section>
+            
+         <section class="max-w-4xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+              Интервью
+            </h2>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book691520066">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Интервью с ib2k</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: _Timyr_</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book691520066">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Оглавление В этой книге вы прочитаете интервью с iBk2k. Приятного прочтения :) Вопрос 1 к iBk2k) Как ты узнал о "Кубаче"? Ответ: Точно уже не помню, но кажется из рекламы на TLauncher. Вопрос 2 к iBk2k) Как долго ты играешь на "Кубаче"? Ответ: В целом в майнкрафт играть начал летом 2022, а на сервер зашёл в сентябре-октябре .  Вопрос 3 к iBk2k) Почему ты не вступал ни в какие кланы? Ответ: Я не увидел смысла пребывания в клане, не увидел интересной механики межкланового взаимодействия, да и вообще механики, дающей ощутимые преимущества или результаты от нахождения в клане. Вопрос 4 к iBk2k) Как ты додумался до ТЦ? Ответ: Ну... Первый месяц я практически не заглядывал в магазины, занимался стандартным выживанием, строил небольшие механизмы облегчающие быт. Как-то, намучившись с крафтом инструментов, купил-таки кирку на эффективность V, которую я окупил за два часа работы в шахте. После этого задумался о ценнообразовании на сервере, ассортименте товаров и помощи начинающим игрокам быстрее встать на ноги. Родилась идея сделать производство, обеспечивающее товарами первой необходимости по доступным ценам. Пробной версией стала "Лавочонка". Там я разместил сет брони и базовые инструменты. Популярность этого магазина показала, что я на верном пути, и я договорился с TheKotic об освоении пустыря за банком. Обращался к более опытным игрокам за помощью в строительстве, но в итоге построил всё сам в стиле советского конструктивизма). По мнению игроков, которые поделилесь отзывами, получилось неплохо) Вопрос 5 к iBk2k) Правда ли, что MightyMike твой сын? Ответ: Да, он действительно мой сын. Именно он привёл меня в мир майнкрафта. Первоночально на Кубач зашёл именно он, а я уже последовал за ним - посмотреть на этот мир в более широком варианте. Я был приятно удивлён атмосферой сервера, достаточным уровнем контроля со стороны администрации и в целом дружелюбной атмосферой. Кубач, на мой взгляд, отличный симулятор социально-экономического взаимодействия и тренажёр умения выстраивать отношени с окружающими. Он позволяет достаточно быстро получить представление о том, что в жизни нас окружают не только друзья, но и мошенники, завистники да и просто хулиганы, а хорошие люди порой могут совершать плохие поступки под влиянием эмоций. К счастью, токсичных людей меньшинство, хоть их деятельность, зачастую, более заметна. Самый главный вопрос 6) Причина твоего ухода с сервера? Ответ: ))) Ну давай уточним. Я не ухожу в полном понимании этого слова . Я выхо- жу из текущей экономическо модели. Т.е. я планирую иногда заглядывать дабы посмотреть за развитием сервера и пообщаться с игроками, поохотиться и просто провести время). Про причины я всё же распростронятья не буду). ВСЁ:)
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book691520066">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book691520066" data-title="Интервью с ib2k">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book691520066">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+          </section>
+          
+          <section class="max-w-4xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+              Кланы
+            </h2>
+
+          <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book358711108">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Клан KPK(SGSB)</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Mainkraftys</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book358711108">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Добро пожаловать в клан KPK ! В нашем клане вас ждет приятная дружная атмосфера. Мы всегда рады помочь. А также приятно по общаться и выгодно по торговатся. Мы являемся кланом строителей. И всегда готовы что нибудь построить. Также у нас есть маленькая экономика. Чтобы вступить в клан нужно: 1) Сообщить о намерении вступить в клан. 2) Пройти собеседование. 3) Вступление в клан бесплатно. 4)Подождите когда вам придет приглашение в клан. 5) Всё вы теперь в нашем клане ! Также у нас можно устроится на работу. Список работ: строитель-архитектор, фермер, шахтер, кладовщик, оружейник, животновод, офицер. Размер зарплаты зависти от качества и количества работы. Надеюсь вам понравится наш клан :)
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book358711108">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book358711108" data-title="Клан KPK(SGSB)">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book358711108">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+          </details>
+         </section>
+          
+          <section class="max-w-4xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+              Философия
+            </h2>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book750809369">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Законы Янте</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Samovarium</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book750809369">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Свод законов Янте - десять правил, описывающих скандинавский склад ума. Нарушая их - человек вызывает к себе всеобщее презрение. Десять правил: 1.Не думай, что ты особенный. 2.Не думай, что ты чего-то стоишь. 3.Не думай, что ты умнее нас. 4.Не воображай, что ты лучше нас. 5.Не думай, что ты знаешь больше нас. 6.Не думай, что ты важнее нас. 7.Не думай, что ты всё умеешь. 8.Тебе не следует смеяться над нами. 9.Не думай, что кому-то есть до тебя дело. 10.Не думай, что ты можешь нас поучать. Наказание: 11.Возможно, мы знаем кое-что о тебе?
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book750809369">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book750809369" data-title="Законы Янте">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book750809369">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book249410196">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">ФилПерСном1</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Subway_11</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book249410196">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Глава I Разбор пословицы: "Дают - бери, не дают - барабарабере" Эта пословица существует уже давно. С давних лет люди используют её, когда другие хотят чего-то бесплатного, но бесплатным бывает только "сыр в мышеловке" - и то не правда. Почему? Во-первых, человек не поместится в мышеловку, а во-вторых, сыр и мышеловку тоже надо купить, что не делает её бесплатной. Что значит "барабарабере" Это насмешка над людьми, которые пытаются ыфвфывфывфывыфвфывфв из-за того, что им не дают.(девушки) Мужчины предпочитают говорить "Не дают - вайлдбери" Эта версия выражения говорит о том, что если не отдают свои предметы за бесплатно, то это продаётся, как на площадке "Wildberries" (валйдберрис, вайлдбери) =================== Глава II Состав коры дуба Каждый день мы видим деревья, особенно дубы. Из чего же состоит его кора? Ну что, похимичим! =================== C21H23No5 Это формула коры дуба... Читать далее =================== Глава III Информация не найдена =================== Глава IV Информация отсутствует. =================== Глава V Уже издавна ходит по миру выражение "не учи учёного" Но что же это означает на казахском? Перевод на казахский: Әжеңе жұмыртқа соруды үйрет Но самое странное - обратный перевод. Он звучит так: научи свою бабушку лизать яйца... Инцест - дело семейное. Глава VI Спасибо за прочтени е первого тома "Философии перед сном"! Надеюсь, вам понравилось. С любовью, Издательсвто "Стручок"
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book249410196">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book249410196" data-title="ФилПерСном 1">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book249410196">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book378166453">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">ФилПерСном заключение</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Subway_11</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book378166453">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  ЗаключительныйтомКаксьавитьпробел?Янезнаю,ноэтовозможно. Ставитьпробелвозможно, например нижними_подчёркиваниями, ноэтосчитается заоднослово.Какимобраз омпробел возможен? Незнаю.Можно КаждоеСлово ПисатьС ЗаглавнойБуквы.Аможнокакв старинуписать твёрдыйзнак (ъ)Вотътакъ например ъделалиънаъдревней ъруси. =-=-=-=-=  =-=-=-=-= глава2 следующаястраница? .--. --- -- ---   --. .. - . --..-- / --   .  -. .-.- / -.. . .-. .  ..- .- - / .-- / --.. .- .-.. --- ...- -. . . -.- .-   .... .-.-.- / .-.- / .--. .. ---- ..- / ..-..   - --- - / - ---  -- / ... -.- .-- --- --.. -..- / ... .-.. # --.. -.  -- .-.-.- / -. - --- --- .-. -.. .. -. .  - - -.-- / ..--- ----- .---- . -.-.- .  ..-- ..--- .---- =-=-=-=-= -  =-=-=-=-= Конец?.. Возможно, это последний том Философии перед сном. Спасиьо всем читателям!.. 3( 3( 3( 3( (3 (3 (3
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book378166453">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book378166453" data-title="ФилПерСном заключительный том">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book378166453">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book954675111">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Государь Пролог</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Samovarium</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book954675111">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Никколо Маккиавелли "Государь" Никколо Маккиавелли (1469-1527) Итальянский (флорентийский) мыслитель и государственный деятель. В его трактате "Государь", созданном около 1513 года, описываются методология захвата власти, методы правления и умения, необходимые для идеального правителя. Эти материалы не устарели до сих пор: принципы, описанные в книге, актуальны и в современной политике. Никколо Макиавели - его светлости Лоренцо деи Медичи * * * Обыкновенно, желая снискать милость правителя, люди посылают ему в дар то, что имеют самого дорого, или чем надеються доставить наибольшее удовольствие, а именно коней, оружие, парчу, драгоценные камни и прочие украшения, достойные величия государей. Я же, вознамереившись засвидетельствов- ать мою преданость Вашей светлости, не нашел среди того, что владею, ничего более ценного, нежели познания мои в том, что касается деяний великих людей, приобритенные мною многолетним опытом в делах настоящих и непристрасным изучением дел минувших. Положив много времени и усердия на обдумывания того, что я успел узнать, заключил свои размышления в небольшом труде, который посылаю в дар Вашей светлости. И хотя я полагаю, что сочинение это недостойно предстать перед вами, однако же верю, что по своей снисходительности вы удостоите принять его, зная, что не в моих силах преподнести дар больший, нежели средство в кратчайшее время постигнуть то, что сам я узнавал ценой многих опасностей и тревог. Я не заботился здесь ни о красоте слога, ни о пышности и звучании слов, ни о каких внешних украшениях и затеях, которыми многие любят расвенчивать и уснащать свои сочинения, ибо желал, чтобы мой труд либо остался в безисвестности, либо получил признание и единство за необычность и важность предмета. Я желал бы также, чтобы не сочли дерзостью то, что человек низкого и ничтожного звания береться обсужждать и направлять действия государей. Как художнику, когда рисует пейзаж, надо спуститься в долину, чтобы охватить взглядом холмы и горы, и поднятся в гору, чтобы охватить взглядом долину, так и здесь: чтобы постигнуть сущность народа, надо быть государем, а чтобы постигнуть природу государей, надо принаделжать народу. Пусть же Ваша светлость примет сей скромный дар с тем чувством, какое движет мною; если вы соизволите внимательно прочитать и обудмать мой труд, вы ощутите, сколь безгранично я желаю Вашей светлости того величия, которое сулит вам судьба и ваши достоинства. И если с той вершины, куда взонесена Ваша светлость, взор наш когда-либо обратиться на ту низменность, где я обретаюсь, вы увидете, сколь незаслуженно треплю я великие и постоянные удары судьбы. Маккиавели <Госдуарь> ПРОЛОГ КОНЕЦ. Кто дочитал, тот молодец. И вот подходит конец пролога, обращение автора к царю, и начинается мое обращение к ВАМ мои дорогие читатели. Всё только начинается. Готовьте свои кошельки, мозги и анусы, к моим новым перепечаткам. С любовью, Сам Самоварыч. Аминь :з
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book954675111">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book954675111" data-title="Государь Пролог">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book954675111">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book516705079">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Государь ch1</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Samovarium</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book516705079">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  ГЛАВА 1 СКОЛЬКО ВИДОВ БЫВАЮТ ГОСУДАРСТВА И КАК ОНИ ПРИОБРИТАЮТСЯ Все государства, все державы, обладающие или обладавшие властью над людьми, были и суть либо республики, либо государства, управляймые единовластно. Последние могут быть либо унаследоваными -у если род государя правил долгое время, либо новыми. Новым может быть либо государство в целом - таков Милан для Франческо Сфорца; либо его часть, присоединенная к унаследованному государству вследствии завоевания - такового Неополитанское королество для короля Испании. Новые государства разделяются на те, где подданные привыкли повиноваться государям, и те, где они исконно жили свободнно; государства приобретаются либо своим, либо чужим оружием, либо милостью судьбы, либо доблестью. ГЛАВА 2 О НАСЛЕДСТВЕННОМ ЕДИНОВЛАСТИИ Я не стану касаться республик, ибо подробно поговорю о них в другом месте. Здесь я перейду прямо к единовластному правлению и, держась намеченного выше порядка, разберу, какими способами государи могут управлять государствами и удерживать над ними власть. Начну с того, что наследному государю, чьи подданные успели сжиться с правящим домом, гораздо легче удержать власть, нежели новому, ибо для этого ему достаточно не переступать обычая предков и впоследствии без поспешности применяться к новым обстоятельствам. При таком образе действий даже посредственный правитель не утратит власть, если только не будет свергнут особо могущественной и грозной силой, но и в этом случае он отвоюет власть при первой же неудаче завоевателя. У нас в Италии примером может служить герцог Ферринский, который удержался у власти после поражения, нанесенного ему венецианами в 1484 году и папой Юлием в 1510-м, только потому, что род его исстари правил в Ферраре. Ибо у государя, унаследовавшего власть, меньше причин и меньше необходимости притеснять подданных, почему они и платят ему большей любовью, и если он не обнаружит чрезмерных пороков, вызывающих ненависть, то закономерно пользуется благорасположением граждан. Давнее и преемственное правление заставляет забыть о бывших некогда переворотах и вызваших их причинах, тогда как всякая перемена прокладывает путь дугим переменам. Н.Маккиавели "Госудуарь". 1 ЧАСТЬ. Конец. Кто читал, тот красавчик. А теперь пришло время снова увидется с вами, читатели. Спасибо за покупку и всё прочие. По правде говоря, эта часть могла быть длинее, если б не странное исчезновение данных, после очередного перерыва наш ебучий кастом. Нет, конечно рад вашим подгонам, но когда желающих втюхать хлам становится слишков много, уже заканчиваешься и ты, в том числе зака
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book516705079">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book516705079" data-title="Государь ch1">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book516705079">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book675713238">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Koganusan</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Samovarium</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book675713238">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                 «Коганусан» - традиционный гномий погребальный обряд, исполняемый в память и честь тех гномов, которые безвременно и жестоко погибли. (как выяснилось, именно так многие гномы встречают свою судьбу) Он восходит к самым ранним анналам записанной истории гномов, к одному из первых мест их основания. Цивилизация тогда была молода, и эта крепость пережила немало трудностей, но в итоге процветала недолго. Как гласят легенды, древнему протобожеству Армоку, которому тогда поклонялись как единому всемогущему богу-создателю, надоело смотреть, как его творения влачат свою маленькую и бессмысленную жизнь в горных чертогах. Тогда Армок послал к ним Бабочку Хаоса, которая тут же навсегда изменила ход судьбы гномов.Прошло совсем немного времени, и почти все до единого живущие здесь люди были медленно и коварно уничтожены последовавшими за этим беспорядками и истериками. Когда пришло время, и крепость коллективно вздохнула в последний раз, прежде чем стать холодной, как обсидиан. Потерянные души стояли, молча оплакивая злую судьбу, постигшую их, их друзей и семьи, и выходили через открытые ворота своего горного дома. Затем Армок отправил свой огромный корабль рабов с проклятыми душами,Koganusan "The Boat of Murdered". Гномы были прикованы к своим местам на бесконечной гребной галерее под палубой и вынуждены вечно рабски управлять кораблем, проплывая через Великий Первозданный Океан Крови. Время уже давно стерло многие подробности об этих ранних гномах, и рассказы об Армоке в основном забыты и заменены современным пантеоном меньших божеств. Тем не менее гномы и по сей день считают нужным отправлять своих мертвецов в ряды гребцов на великом корабле проклятого Koganusan. Ибо в конце концов, даже с новыми богами, присматривающими за ними, они знают в своих сердцах, что все мы... Рабы Армока, бога крови. Вот и подошел канон всех гномьих историй Dwarf Fortress. Кто дочитал, тот молодец. Спасибо за уделенное моей писанине время, деньги и твоё очко С любовью, Сам Самыч :3
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book675713238">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book675713238" data-title="Koganusan">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book675713238">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book255595666">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Наука о девушках</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: TheKotic</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book255595666">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Наука о девушках Приветствую тебя дорогой читатель. В данном пособии я поведую тебе о девушках! Что это такое? И нахуй оно надо. Мы рассмотрим различные скилы, а так же места спавна данных мобов. Ну что ж поехали! Глава I. Описание По своей сути мобы девушки являются обычными игрока, но не всё так просто на первый взгляд! Как правило их можно разоблачить по скину и манере общения, но будь осторожен ведь есть вероятность того что у неё есть хуй. Девушки же далеко не самые предсказуемые мобы. У них нет определённой простой механики действий и атаки, в их случае механика поведения скорее комплексная и обычно не всегда предсказуемо холодным расчётом. В основном вся механика завязана на их скилах и характере. Да, Не удивляйся! Помимо различных скилов и примитивных атак в их систему ещё входит механика "Характера". Глава II. Скилы 1. Приютите я девушка. Данный скил помогает найти себе жильё, шанс увеличен примерно в 2 раза по сравнению с обычным игроком. 2. Твоё-моё, моё-моё Сей скил позволяет ей забирать ресы из твоего сундука и различных ферм, а так же огорода! Но есть контра данной абилки и это твой эндер чест! 3. Обидка. Это крайне опасная способность! Она способна жертву заставить верить в то что он виноват в её проблемах. По сути этот скил самый первоначальный из скилов контроля разума, хоть и физического дамага он и не наносит, но обычно критует по ментальному ХП. Весь билд данного класса не славится высоким дамагом. На самом деле количество наносимого дамага крайне не велик, вся суть этого билда заключается в манипулятинвых скилах, направленных в сторону жертвы (Игрока). Накладывает на жертву -50% к Удаче +999% к вине. 4. Изобилие. Этот скил очень хорошо помогает в пати товарищем, как правило они всегда всё носят с собой, велика вероятность что она может с тобой поделиться различным своим лутом. По сути этот класс является крайне хорошим сопортом, но это зависит от характера моба, но увы это далеко не всегда. 5. Обновка. Девушки не плохи в создании хорошего декора, однако некоторые мобы способны перекинуть этот скил на игрока, заставив тем самым жертву строить ей свой собственный данж. 6. Оглушение. Довольно грозная абилка, однако она работает только в голосовом чате. Скил легко контрить- не заходи в голосовой чат. 7. Каблук. Эту абилку можно считать их ультой. Она полностью подчиняет разум игрока, тем самым делая из него свою безвольную марионетку. Главный скил контролся разума, но на этом ещё фичи не заканчиваются! У него есть пассивные эффекты, а именно он накладывает эффект полного повиновения и вампиризм. Вампиризм востоноваливает мобу ментальные ХП высасывая его тем самым из игрока. Контрить это крайне тяжело. Как правило если игрок не смог в самом начале законтрить скил "Обидка", то и этот подавно. Очень сильно влияет на характер жертвы, уничтожая его в пух и прах. 8. Ты стал другим. Сломав полностью жертву в ментальном плане, моб собирается переходить на другую жертву и забирает все накопленные ресы и добивает жертву своим уходом. Накладывает на игрока -999% самоуверенности, а так же +999% к депрессии. Увы данный скил контрить невозможно, но есть способы ослабить эффекты. Для этого необходимо покопать шахту или залутать данж с друзьями. Через некоторое количество времени дебафы полностью снимаются делая тем самым игрока сильнее. Глава III. Характер Данные скилы имеются абсолютно у всех мобов, но однако вероятность активации данных абилок зависит от характера. Сейчас мы с вами их и рассмотрим! 1. Вампир. Как правило такой класс крайне инфантильный и не имеет за собой каких либо моральных ценностей. Вся её цель сводится к высасыванию ресов из игрока. 2. Трап. Сей класс очень сильно понимает игрока и оказывает большую моральную поддержку, но и тут далеко не всё так просто... У неё есть хуй. Я не знаю плюс это или минус, каждый судит сам... 3. Оболочка Её никто не замечает, как правило этот тип ничего не умеет и постоянно тупит. Даже не может граммотно использовать свои скилы. Сапортер. Самый полезный тип их всех. Обычно не использует на игроке скилов по контролю разума. Любит помогать и поддерживать игрока. Даёт самые качественные бафы, которые есть в игре! Всё путник! Теперь ты знаешь что такое бабы и нахуй оно надо. Мы разобрали с тобой методы конты их скилов, а так же различные типы данных мобов!
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book255595666">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book255595666" data-title="Наука о девушках">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book255595666">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book834433795">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Ховамол 1 часть</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Samovarium</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book834433795">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  «Ховамол» («Речи Высокого») — одна из поэм древнескандинавского «Королевского кодекса». Под «Высоким» подразумевается скандинавский бог Один, который в такой форме рассказывает смертным о том, как достойно прожить жизнь. 1. Внутри ворот | прежде чем человек пойдет, (Пусть настороженно смотрит,) Пусть долго смотрит по сторонам; Ибо мало знает он, где может таиться враг, И сидит на местах внутри. 2. Слава дарителю! | Пришел гость; Где сядет незнакомец? Быстрым будет тот, кто мечами попытается Доказать свою силу. П.с : [1. Эта строфа цитируется Снорри, но вторая строка опущена в большинстве рукописей Прозаической Эдды. 2. Вероятно, первая и вторая строки первоначально не имели ничего общего с третьей и четвертой, причем последние две относятся не к хозяину или гостю, а к общей опасности подкреплять свои взгляды мечом]. 3. Огонь нужен тому, кто с обмороженными коленями Пришел из холода без него; Еда и одежда должны быть у путника, Человек с гор пришел. 4. Вода, полотенца и приветственная речь Если он найдет того, кто придет на пир; Если он получит известность и будет снова приветствоваться, Он должен поступить мудро и хорошо. 5. У того, кто странствует по свету, должно быть много ума, Но дома все легко; На безмозглого мудрый подмигнет. Когда среди таких людей он сидит. 6. Человек не должен хвалиться остротой своего ума, но держит его в глубине души; К молчаливому и мудрому редко приходит беда Когда он гостем в дом приходит;(Ведь лучшего друга не найти чем мудрость испытанная и верная). 7. Знающий гость, который идет на пир, В молчаливом внимании сидит; Ушами слушает, глазами смотрит, И все мудрые люди настороже. [6. Строки 5 и 6, по-видимому, были добавлены в строфу]. 8. Счастлив тот, кто завоевывает для себя Благосклонность и похвалы справедливые; Менее безопасна мудрость, найденная Которая скрыта в чужом сердце. 9. Счастлив тот, кто, пока жив, имеет Мудрость и похвалу, Ибо злые советы человек часто Из чужого сердца 10. Лучшего бремени никто не понесет для странствий широких, чем мудрость; Лучше богатства на неведомых путях, И в горе она дает прибежище. 11. Лучшего бремени никато не понесет Для странствий широких, чем мудрость; Хуже пищи для путешествия, не занесённой в путь, нет, чем чрезмерное питье эля. 12. В эле для смертных меньше добра, чем многие считают. в эле для смертных; Ибо чем больше он пьет, тем меньше владеет своим умом. [12. Некоторые редакторы по-разному объединяют эту строфу с двумя последними строками строфы 1, поскольку в рукописи первые две строки последней сокращены и, если они вообще там есть, предположительно идентичны первым двум строкам строфы 10]. 13. Над пивом бродит птица забвения, И крадет умы людей; В перьях цапли я лежал. И в доме Гуннлота был задержан. 14. Пьян я был, мертвецки пьян, Когда с Фьяларом мудрым я был; Лучшее из питья, если кто назад принесет мудрость с собой домой. 15. Сын царя должен быть молчаливым и мудрым, И смелым в бою; Смело и с радостью человек должен идти, пока не наступит день его смерти. 15. Сын царя должен быть молчаливым и мудрым, И смелым в бою; Смело и с радостью человек должен идти, пока не наступит день его смерти. 16. Медлительный человек верит, что будет жить вечно, если не будет бороться; Но возраст не даст ему дара покоя, Хотя копья могут пощадить его жизнь. 17. Дурак, придя на пир, становится боязливым, Он то заикается, то замирает; Но вскоре, если он выпьет, видно. каков его ум. [13. Цапля: птица забвения, упомянутая в строке 1. Гуннлот: дочь великана Суттунга, у которого Отхин выиграл поэтическую медовуху. 14. Фьялар: по-видимому, другое имя Суттунга. Эта строфа и, возможно, 13-я, по-видимому, были вставлены в качестве иллюстрации] 18. Лишь тот знает, кто широко странствовал, И далеко за границей побывал, Как велик ум, направляемый им. Что богатством мудрости обладает. 19. Не избегай медовухи, но пей в меру; Говорите по существу илиу молчите; За грубость никто тебя не упрекнет. Если скоро в постель свою ты стремишься. 20. Жадный человек, если его ум неясен, будет есть, пока не заболеет; Вульгарный человек, когда он среди мудрых, Презирает свой живот. 21. Пастухи хорошо знают, когда им идти домой, И тогда они уходят с травы; Но глупый человек меру живота своего не знает никогда. 22. Скупой человек и бедный умом Во всем насмехается; Ибо никогда он не знает, что должен знать, Что он не свободен от недостатков. 23. Неумный человек бодрствует всю ночь, размышляя о многих вещах; Когда наступает утро, он измучен, И горе его такое же, как и было. 24. Глупый человек находится в дружбе со всеми. Тот, кто смеется над ним, держит его; Когда среди мудрых он не замечен. Хотя о нем говорят с ненавистью. 25. Глупый человек в друзьях у всех тех. кто смеется над ним; Но правду, придя на совет, он узнает, И мало кто в его пользу скажет. 26. Невежественный человек думает, что все знает, когда сидит один в углу; Но никогда он не знает, что ответить, когда приходят другие с вопросами. 27. Бестолковый человек, когда встречается с людьми, Пусть лучше молчит; Ибо никто не обнаружит, что он ничего не знает, если рот его не будет открыт слишком сильно.( Но человек не знает, если он ничего не ведает, когда его рот открыт слишком сильно). 28. Мудрым покажется тот, кто хорошо умеет задавать вопросы, и хорошо отвечать; Ничто не скрыто, что люди могут сказать среди сынов человеческих. 29. Часто говорит тот, кто никогда не стоит на месте Словами, в которые нет веры; Болтливый язык, если он не находит узды, Часто сам для себя поет плохо. [25. Первые две строки сокращены в рукописи, но, несомненно, идентичны первым двум строкам строфы 24. 27. Последние две строки, вероятно, были добавлены в качестве комментария к строкам 3 и 4]. 30. В насмешку никто не держит, Хоть на пир он идет; Мудрым кажется тот, кто часто, если его ни о чем не спрашивают, И безопасно сидит он в сухой коже. 31. Мудрый гость удерживает его, чтобы довести до ручки, Когда насмехается над другим; Но мало знает он, кто смеется на пиру, Хотя насмехается он средь врагов своих. 32. Дружелюбны умом многие люди, Пока не попируют и не поиздеваются над друзьями; Для человечества это всегда беда Когда гости вместе ссорятся. 33. Часто следует совершать раннюю трапезу, И не поститься на пиру; Иначе он сидит и жует так, будто подавится, И мало что может спросить. 34. Кривой и далекой бывает дорога к врагу, пусть даже дом его на шоссе; Но широк и прям путь к другу, Хоть он и далеко. 35. Никуда не уйдет, не останется гостем В одном месте навсегда; Любовь превращается в ненависть если долго сидеть У очага в чужом доме. Конец 1 части
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book834433795">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book834433795" data-title="Ховамол 1 часть">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book834433795>
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+          </section>
+
+          <section class="max-w-4xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+              Шпаргалки по IT
+            </h2>
+
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book834821054">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Шпаргалки по IT</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: BledWiki</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book834821054">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Linux команды: https://www.xmind.net/m/WwtB/# Шпаргалка сис.админа: https://habr.com/ru/company/ruvds/blog/417485/ * [github pages](https://pages.github.com/) - можно использовать для хостинга простого сайта, есть поддержка Jekyll * [pythonanywhere](https://www.pythonanywhere.com/) - туповат, но подходит для хостинга совсем простых питоновских проектов * [cloud.ru](https://cloud.ru/ru/free-tier) - предоставляют бесплатный сервер и 4000 бонусов, которыми оплачивается сеть. Бонусы сгорают через 2 месяца. * [nexcord](https://nexcord.com/) это библиотека для языка программирования Python, предназначенная для создания Discord-ботов. Она является форком популярной библиотеки `discord.py` и предоставляет современный, асинхронный API для взаимодействия с Discord . Библиотека которая сама качает последнюю версию chrome-driver и проверяет на обновления Юзается одной функцией, код максимально простой https://github.com/iriswolf/chromedriver_autoupdater
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book834821054">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book834821054" data-title="Шпаргалки по IT">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book834821054">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+          </details>
+
+          <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book521177713">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Паттерны проектирования</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Bledwiki</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book521177713">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  <img src="Images/Books/1.png" alt="1">
+                  <img src="Images/Books/2.png" alt="2">
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book521177713">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book521177713" data-title="Паттерны проектирования">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book521177713">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+           </details>
+          </section>
+          
+          <section class="max-w-4xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+              Фанфики
+            </h2>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book624921414">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Страстная ночь</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: vasia</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book624921414">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <span class="badge badge-danger ml-2">18+</span>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Ареки с котиком после первого раза безумно полюбили друг-друга. Не долго думая, они решили поехать в отель неподалеку, и повторить ночь.. Приехав на место они оплатили свой номер, после чего поднявшись заперли дерь, затем чего котик начал намазывать свой огромный дилдак вазелином, прицепив дилдо к кровати, он вставил кляп в рот ареки и жёстко, без предупреждения, сорвал с него одежду, после чего, резко, без смазки вошел в него по самые яйца, при этом сам елозя очком по огромному дилдо в этот момент в комнату вошёл Budka. TheKotic: ураа, свежее мясо, само на хуй просится! набросившись на него, он оглушил и крепко привязал к моменту, когда будка проснулся, ареки еле был в живых:очко розорвано и из него течёт кровь и сперма всё лицо в слезах от боли и счастья, дыхание сбито Котик своими огромными мускулами разорвал тугие верёвки и рывком поднял будка с пола. Бедолага уже понял, что будет и решил не сопротивлятся, доверившись в его мощные руки, лунный свет отражался на его залысине. Модер уже отдышавшись был готов к второму кругу, обильно смочив свою нежную, раздолбаную попку, Котяра поставил Ареки и второго админа раком, надел латексные перчатки и ввёл свои руки в их анусы, по локоть. Ареки уже привыкнув, начал стонать, в то время. как будка испытал острую боль, пронизывающую всё его тело, сначала он напрягся, но позже расслабив булочки, он принял в себя твердые, волосатые руки Данила, получив безумное удовольствие, сравнимое с благословением господа, с рождением заново, с очищением души грешника, а так же с покупкой + на сервере. В ночной темноте, были слышны только стоны, улавливались запахи пота, смазки, спермы и калла, которые смешали во едино что создавало особый аромат, такой манящий и пленящий.. Когда Будка вместе с Ареки кончили, котофил вытащил руки и облизнув их сперму достал плётку, подключил к ним мастурбаторы и с криками "Купите +" начал их бить, под его гнётом они застонали:"Слава котику и Котократии!" в этот момент неожидано зашёл лесаня, он появился для котика и модера как гром среди ясного неба, но на самом деле его успел позвать будка, в тот момент, когда отрубался. Лесаня достал огромную "скатерть самотрахалку" и свернув её в "морковку" начал жёстко бить котика, за то, что он не выпускает апдейты, сзади подкрался верный слуга котика и нагнул лесаню, вставив тот самый дилдо кота, за то, что он не делает нормальный анти-чит Через пол часа все лежали без сознания, натрахавшиеся и усталые, но счастливые!
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book624921414">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book624921414" data-title="Страстная ночь">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book624921414">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+          </section>
+          
+          <section class="max-w-4xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+              Предсказания
+            </h2>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book360158187">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Предсказание 5</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: BudkaBDK</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book360158187">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Не откладывай дела в долгий ящик, иначе так ни к чему и не придёш. Если ты будешь терзаться сомнениями, выбор будет сделан за тебя! 
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book360158187">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book360158187" data-title="Предсказание 5">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book360158187">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+           <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book863652589">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Предсказание 13</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: BudkaBDK</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book863652589">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Оставь эмоции и положиcь на разум. Сконцентриру внимание на сегодняшнем дне. 
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book863652589">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book863652589" data-title="Предсказание 13">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book863652589">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+          </section>
+          
+          <section class="max-w-4xl mx-auto px-4 py-8">
+            <h2 class="text-2xl font-bold mb-6 text-white category-title" data-aos="fade-up">
+              Анекдоты
+            </h2>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book983568080">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Анектоды 10</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: YuraPlay</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book983568080">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  Анекдот:1 — Ты что сегодня делаешь? — Ничего... — Ты же вчера это делал?! — Я не доделал... Анекдот:2 Настраиваю спутниковую тарелку за городом. Стою перед ней, у уха телефон, на том конце человек, который в этом разбирается. Человек: -Там есть такая штука белая, как крышечка. Она еще крутится.. (пауза) Нашел какую-то белую штучку, проверил — крутится, значит она. —... ты ее не крути. А то потом без специального оборудование уже ничего не сделаешь... Анекдот:3 Илья Муромец рассказывает, как он сражался с Лернейской гидрой: -Отрубаю ей голову - на её месте четыре вырастаю. Четыре отрубаю - три вырастают. Три отрубаю - семь вырастают. -Ну чё? -Чё-чё - проблем с мясом в нашем селе никогда не было. Анегдот:4 Мечта каждого теоретика: воплотить в жизнь свою теорию. Желание любого практика — это держаться подальше от этих полоумных теоретиков. Анекдот:5 Если вы приехали из командировки, а квартира чисто прибрана, дети делают уроки, жена готовит, тёща вяжет, а собака спокойно спит на своём месте - они сломали ваш компьютер! Анекдот:6 Выясняет один "новый русский" у другого: - Так, братан, стало быть, надо тебе двести штук баксов. Вот я их тебе дам, а какая гарантия, что ты их через месяц вернешь? — Слово честного человека!.. — Лады! Вот нынче вечером ты этого человека и приводи, поглядим, поразговариваем. Анекдот:7 — Доктор, она будет жить? - Да - Доктор, это правда? - Конечно. - Доктор, вы уверены? - Да перестаньте уже совать мне деньги, не стану я убивать вашу тещу! Анегдот:8 Как только экстрасенс говорит что может предвидеть будущее, сразу пропишите ему в рыло, не беспокойтесь, экстрасенс это предвидел и увернётся, а если не увернётся, то чего шарлатанов жалеть. Анекдот:9 - Девушка, поверьте мне, я не пьяный! Вы действительно очень красивая. -Какая я тебя девушка, я инспектор ГИБДД!! Анекдот:10 Мой муж вернулся из зоны, такой тихий, спокойный: — А на зоне-петухом ходил!!
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book983568080">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book983568080" data-title="Анекдот 10">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book983568080">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book182278830">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Анекдот 11</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: YuraPlay</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book182278830">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  анегдот 1: Один еврей другому: -При коммунизме у меня будет свой самолёт! -Зачем тебе самолёт? -А вдруг, скажем, в Калуге муку дают. Полчаса лёту-и я там! анегдот 2: — Что такое дефицит с марксистской точки зрения? — Это объективная реальность, не данная нам в ощущении. анегдот 3: -Пап, помоги найти общий знаменатель. -Это бесполезно, сынок, они ищут его с тех пор когда я ещё ходил в школу. анегдот 4: Колхозник поссорился с женой и грозится вступить в партию. — Я тебе, стерва, такого стыда наделаю! анегдот 5: Продавец газет выкрикивает: "Правды" нет! "Советская Россия" продана! остался /===\ | -_- | \===/ только "труд" за три копейки! анегдот 6: Шеф своему подчиненному: — Иванов, Вы уволены! Иванов: — Уволен?!! Странно, мне казалось, что рабов продают... анегдот 7: -Сколько строит аренда этой шикарной квартиры? — Девушка, это винный погреб. анегдот 8: — Доктор, результаты анализов готовы? Я умираю от любопытства! — Хмм, ну, не только от любопытства... анегдот 9: -Откуда мы узнаем о новостях в мире? -Из опровержений ТАСС. анегдот 10: Мне тут заявляют, что видеомагнитофон в СССР был дефецытом! А сейчас? Объехал все магазины торгующие техником, нет видеомагнитофонов совсем! Что на это скажете?
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book182278830">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book182278830" data-title="Анекдот 11">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book182278830">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book929931989">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Сборник анектодов 1</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Shlapow</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book929931989">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  1 приехали трое русских в турцию и заселились на 45 этаже. и сотрудник отеля им говорит что лифт работает до 12 ночи. в 12 возвращаются русские из ресторана и решили пока они поднимаются первые 15 этажей 1 русский будет анекдоты рассказывать . вторые 15 этажей 2 будет петь песни,а третьи 15 этажей 3 будет страшилки рассказывать. первые и вторые 15 этажей пролетели незаметно, а на последние 15 этажей третий сказал "я вам такую страшилку раскажу обосрётесь... мы ключи в низу забыли" 2 На уроке немецкого -учитель: Вова переведи "гутен млрген" -Петя: в морге хорошо 3 Учитель русского приходит в школу с синяком -директор: как так то Вы же интелигент -учитель:да был я на днях в доме одной особы ,а там был военный, а он и говорит "был у меня в роте один х#р" а военнуму и говорю "правильно не в роте ,а во рту" 4 В больнице -медсестра: доктор что с поциентом делать будем? -доктор:закапывать -медсестра:капли? -доктор:а вы оптимистка 5 Плохая примета ехать в лес ночью в багажнике 6 В магазине -покупатель:будте добры один ковёр -продавец:зачем вам ковёр? Труп заворачивать? -покупатель: два ковра 7 Маленький мальчик ковид подхватил к бабушке в гости без маски ходил выгоды он получил спазу две антитела........ и квартиру в москве 8 -пилот: диспетчер диспетчер это рейс 127 мы терпим крушение -диспетчер: рейс 127 понял приём вас вычёркиваю 9 Надпись на надгробии "добавляйтесь рада видеть вас в друзьях" 10 В бассейне -отец: здравствуйте, можно записать девочку на плавание? -тренер:конечно у нас как раз место освободилось мальчик утонул СЛЕДУЮЩИЙ ТОМ СКОРО
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book929931989">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book929931989" data-title="Сборник анектодов 1">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book929931989">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+            
+            <details class="book-item rounded-lg" data-aos="fade-up" data-aos-delay="100" id="book982632044">
+              <summary class="book-header cursor-pointer py-4 px-6 flex justify-between items-center">
+                <div class="flex items-center">
+                  <div class="book-icon w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-book text-xl text-emerald-500"></i>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold text-white">Сборник анектодов 2</h3>
+                    <div class="text-sm text-gray-500 mt-1">Автор: Shlapow</div>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <button class="favorite-btn" data-book-id="book982632044">
+                    <i class="far fa-star star-icon"></i>
+                  </button>
+                  <div class="text-gray-400 ml-2">
+                    <i class="fas fa-chevron-down chevron"></i>
+                  </div>
+                </div>
+              </summary>
+              
+              <div class="book-content px-6 py-4">
+                <p class="text-gray-400 mb-4">
+                  1 маленький мальчик пошёл по обедать, гамбургер новый решил он отведать, жизнь пролетела хватило кусочка холмик,оградка, ВКУСНО И ТОЧКА 2 -Ура я поступил в автошколу, скоро будет на одного пешехода меньше -А может, и не на одного 3 В библиотеке: посетитель: дайте мне книгу о вязании узлов библиоткекарша: не дам, вот такие как вы берут и не возвращают 4 -доктор, я съел пиццу с упаковкой, я умру? -ну же голубчик все же умрут -как все умрут, что я натворил!?!?!?!?!?!?!? 5 -Яков, я слыхал в одессе накрыли крупную партию кокаина -И правильно что накрыли, Фима, ато намокнет 6 Урок русского на кавказе учитель: дэти рускый язык ошень слошный вот смотрите, Настя это имя а нэнастя плохая погода 7 два друга через забор: 1:Слышь лови топор 2: .......................... 1:что молчишь, не поймал? 8 на уроке русского языка Учитель: дети слушайте c#ка это литературное слово так что слущайте c#ки 9 щедрая, но сильная девочка насмерть закидала утку хлебом 10 подходят оптимист пессимист и реалист к тунелю оптимист видит: свет в конце пессимист видит: тму перед собой реалист видит: тёмный тунель и только машинист видит 3 дегенератов на рельсах
+                </p>
+                <div class="book-actions">
+                  <button class="btn-call copy-btn" data-id="book982632044">
+                    <i class="fas fa-copy mr-1"></i> Копировать текст
+                  </button>
+                  <button class="btn-call download-btn" data-id="book982632044" data-title="Сборник анектодов 2">
+                    <i class="fas fa-download mr-1"></i> Скачать TXT
+                  </button>
+                  <button class="btn-call link-btn" data-id="book982632044">
+                    <i class="fas fa-link mr-1"></i> Ссылка на книгу
+                  </button>
+                </div>
+              </div>
+            </details>
+          </section>
+        </div>
+        
+        <div id="favoritesSection" class="col-span-1 md:col-span-2 lg:col-span-4 hidden">
+          <section class="max-w-4xl mx-auto px-4 py-8">
+            <div class="favorites-header">
+               <h2 class="text-2xl font-bold text-white category-title">
+              </h2>
+            </div>
+            
+            <div id="favoritesContainer" class="space-y-6">
+            </div>
+            
+            <div id="emptyFavorites" class="favorite-empty hidden">
+              <i class="fas fa-star"></i>
+              <h3 class="text-xl font-bold text-white mb-2">У вас нет избранных книг</h3>
+              <p class="text-gray-400">Добавьте книги в избранное, нажимая на звездочку рядом с названием книги</p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 50
+    });
+
+    window.addEventListener('scroll', function() {
+      const header = document.querySelector('header');
+      if (window.scrollY > 10) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+    
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const bookId = this.getAttribute('data-id');
+        const bookElement = document.getElementById(bookId);
+        const text = bookElement.querySelector('.book-content p').textContent;
+        
+        navigator.clipboard.writeText(text).then(() => {
+          alert('Текст книги скопирован в буфер обмена!');
+        }).catch(err => {
+          console.error('Ошибка копирования: ', err);
+        });
+      });
+    });
+    
+    document.querySelectorAll('.download-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const bookId = this.getAttribute('data-id');
+        const title = this.getAttribute('data-title');
+        const bookElement = document.getElementById(bookId);
+        const text = bookElement.querySelector('.book-content p').textContent;
+        
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${title}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    });
+    
+    document.querySelectorAll('.link-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const bookId = this.getAttribute('data-id');
+        const url = window.location.href.split('#')[0] + '#' + bookId;
+        
+        navigator.clipboard.writeText(url).then(() => {
+          alert('Ссылка на книгу скопирована!');
+        }).catch(err => {
+          console.error('Ошибка копирования ссылки: ', err);
+        });
+      });
+    });
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.location.hash) {
+        const bookElement = document.querySelector(window.location.hash);
+        if (bookElement && bookElement.open === false) {
+          bookElement.open = true;
+          bookElement.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+      
+      initFavorites();
+      setupFavoritesEvents();
+    });
+    
+    function initFavorites() {
+      let favorites = JSON.parse(localStorage.getItem('bookFavorites')) || [];
+      
+      document.querySelectorAll('.favorite-btn').forEach(btn => {
+        const bookId = btn.getAttribute('data-book-id');
+        if (favorites.includes(bookId)) {
+          btn.classList.add('active');
+          btn.querySelector('.star-icon').className = 'fas fa-star star-icon';
+        }
+      });
+    }
+    
+    function setupFavoritesEvents() {
+      document.addEventListener('click', function(e) {
+        if (e.target.closest('.favorite-btn')) {
+          const btn = e.target.closest('.favorite-btn');
+          const bookId = btn.getAttribute('data-book-id');
+          let favorites = JSON.parse(localStorage.getItem('bookFavorites')) || [];
+          
+          if (favorites.includes(bookId)) {
+            favorites = favorites.filter(id => id !== bookId);
+            btn.classList.remove('active');
+            btn.querySelector('.star-icon').className = 'far fa-star star-icon';
+          } else {
+            favorites.push(bookId);
+            btn.classList.add('active');
+            btn.querySelector('.star-icon').className = 'fas fa-star star-icon';
+          }
+          
+          localStorage.setItem('bookFavorites', JSON.stringify(favorites));
+          
+          if (document.getElementById('favoritesSection').classList.contains('hidden') === false) {
+            renderFavorites();
+          }
+        }
+      });
+    }
+    
+    function renderFavorites() {
+      const favoritesContainer = document.getElementById('favoritesContainer');
+      const emptyFavorites = document.getElementById('emptyFavorites');
+      const favorites = JSON.parse(localStorage.getItem('bookFavorites')) || [];
+      
+      favoritesContainer.innerHTML = '';
+      
+      if (favorites.length === 0) {
+        emptyFavorites.classList.remove('hidden');
+        return;
+      }
+      
+      emptyFavorites.classList.add('hidden');
+      
+      favorites.forEach(bookId => {
+        const originalBook = document.getElementById(bookId);
+        if (originalBook) {
+          const clone = originalBook.cloneNode(true);
+          const favoriteBtn = clone.querySelector('.favorite-btn');
+          
+          if (favoriteBtn) {
+            favoriteBtn.classList.add('active');
+            favoriteBtn.querySelector('.star-icon').className = 'fas fa-star star-icon';
+          }
+          
+          clone.querySelector('summary').open = true;
+          favoritesContainer.appendChild(clone);
+        }
+      });
+    }
+    
+    document.getElementById('allBooksTab').addEventListener('click', function() {
+      document.getElementById('favoritesSection').classList.add('hidden');
+      document.getElementById('allBooksSection').classList.remove('hidden');
+      document.getElementById('favoritesTab').classList.remove('active-tab');
+      this.classList.add('active-tab');
+    });
+    
+    document.getElementById('favoritesTab').addEventListener('click', function() {
+      document.getElementById('allBooksSection').classList.add('hidden');
+      document.getElementById('favoritesSection').classList.remove('hidden');
+      document.getElementById('allBooksTab').classList.remove('active-tab');
+      this.classList.add('active-tab');
+      renderFavorites();
+    });
+  </script>
+</body>
+</html>
