@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cobalt Книги</title>
+  <title>Редактор книг</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="Images/icon.png">
+  <link rel="icon" href="images/icon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>
     tailwind.config = {
@@ -43,27 +43,6 @@
       min-height: 300px;
       font-family: 'Montserrat', sans-serif;
       resize: vertical;
-    }
-    
-    .info-card {
-      background: linear-gradient(145deg, #1e293b, #0f172a);
-      border: 1px solid rgba(14, 165, 233, 0.2);
-      border-radius: 12px;
-      padding: 1.5rem;
-    }
-    
-    .guide-card {
-      background: linear-gradient(145deg, #1e293b, #0f172a);
-      border: 1px solid rgba(14, 165, 233, 0.2);
-      border-radius: 12px;
-      padding: 1.5rem;
-      height: 100%;
-      transition: all 0.3s ease;
-    }
-    
-    .guide-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(14, 165, 233, 0.2);
     }
     
     .char-count {
@@ -203,12 +182,6 @@
           </div>
         </div>
       </div>
-      
-      <div class="mt-4">
-        <div class="example-text">
-          <p><strong>Что будет?</strong> Вместо многострочного текста с переносами, вы получите единую строку, готовую для вставки в библиотеку. Это нужно для экономии места в коде.</p>
-        </div>
-      </div>
 
       <div class="action-buttons">
         <button id="formatBtn" class="action-btn bg-primary text-white">
@@ -223,11 +196,6 @@
           <i class="fas fa-trash-alt mr-2"></i> Удалить текст
         </button>
         
-        <a href="https://t.me/sun_community_chat/10053" 
-           class="action-btn bg-green-600 text-white"
-           target="_blank">
-          <i class="fab fa-telegram mr-2"></i> Отправить книгу
-        </a>
       </div>
     </section>
 
@@ -266,118 +234,6 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <section class="mb-16">
-      <div class="flex items-center mb-6">
-        <h3 class="text-2xl font-bold text-white flex items-center">
-          <i class="fas fa-clipboard-list mr-3 text-primary"></i> Правила публикации книги
-        </h3>
-      </div>
-      
-      <div class="info-card">
-        <div class="grid grid-cols-1 gap-6">
-          <div>
-            <h4 class="text-xl font-semibold text-white mb-4">Основные требования</h4>
-            <ul class="space-y-3">
-              <li class="flex items-start">
-                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                <span>Преобразуйте текст в одну строку</span>
-              </li>
-              <li class="flex items-start">
-                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                <span>Проверяйте текст на наличие ошибок перед публикацией</span>
-              </li>
-              <li class="flex items-start">
-                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
-                <span>Добавляйте оглавление для длинных книг</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="mb-10">
-      <div class="flex items-center mb-6">
-        <h3 class="text-2xl font-bold text-white flex items-center">
-          <i class="fas fa-graduation-cap mr-3 text-primary"></i> Гайды по моду Textbook
-        </h3>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        <div class="guide-card">
-          <div class="flex items-center mb-4">
-            <div class="number-badge">1</div>
-            <h4 class="text-xl font-semibold">Основы работы</h4>
-          </div>
-          <p class="text-gray-400 mb-4">
-            Узнайте, как создавать, редактировать и публиковать книги с помощью мода Textbook.
-          </p>
-          <div class="bg-gray-800 rounded-lg h-48 mb-4 flex items-center justify-center">
-            <div class="text-6xl font-bold text-primary opacity-30">1</div>
-          </div>
-        </div>
-        
-        <div class="guide-card">
-          <div class="flex items-center mb-4">
-            <div class="number-badge">2</div>
-            <h4 class="text-xl font-semibold">Форматирование текста</h4>
-          </div>
-          <p class="text-gray-400 mb-4">
-            Специальные символы, цветовое оформление и другие возможности форматирования.
-          </p>
-          <div class="bg-gray-800 rounded-lg h-48 mb-4 flex items-center justify-center">
-            <div class="text-6xl font-bold text-primary opacity-30">2</div>
-          </div>
-        </div>
-        
-        <div class="guide-card">
-          <div class="flex items-center mb-4">
-            <div class="number-badge">3</div>
-            <h4 class="text-xl font-semibold">Публикация и библиотеки</h4>
-          </div>
-          <p class="text-gray-400 mb-4">
-            Как делиться своими книгами с сообществом и создавать библиотеки.
-          </p>
-          <div class="bg-gray-800 rounded-lg h-48 mb-4 flex items-center justify-center">
-            <div class="text-6xl font-bold text-primary opacity-30">3</div>
-          </div>
-        </div>
-        
-        <div class="guide-card">
-          <div class="flex items-center mb-4">
-            <div class="number-badge">4</div>
-            <h4 class="text-xl font-semibold">Продвинутые функции</h4>
-          </div>
-          <p class="text-gray-400 mb-4">
-            Работа с интерактивными элементами и ссылками в книгах.
-          </p>
-          <div class="bg-gray-800 rounded-lg h-48 mb-4 flex items-center justify-center">
-            <div class="text-6xl font-bold text-primary opacity-30">4</div>
-          </div>
-        </div>
-        
-        <div class="guide-card">
-          <div class="flex items-center mb-4">
-            <div class="number-badge">5</div>
-            <h4 class="text-xl font-semibold">Оптимизация</h4>
-          </div>
-          <p class="text-gray-400 mb-4">
-            Как сделать книги легкими и быстрыми для загрузки.
-          </p>
-          <div class="bg-gray-800 rounded-lg h-48 mb-4 flex items-center justify-center">
-            <div class="text-6xl font-bold text-primary opacity-30">5</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="text-center">
-      <a href="https://m1rotv0rets.github.io/Cobalt_Web/mods.html" 
-         class="px-8 py-4 rounded-lg font-bold text-lg flex items-center mx-auto w-fit bg-gold text-white hover:bg-yellow-500 transition-colors">
-        <i class="fas fa-download mr-3"></i> Скачать Textbook
-      </a>
     </section>
   </main>
 
