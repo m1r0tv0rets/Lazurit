@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cobalt Книги</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="Images/icon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0ea5e9',
+            dark: '#0f172a',
+            minecraft: '#4CAF50',
+            gold: '#FFD700'
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f1f5f9;
+      min-height: 100vh;
+    }
+    
+    .text-editor {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      min-height: 300px;
+      font-family: 'Montserrat', sans-serif;
+      resize: vertical;
+    }
+    
+    .info-card {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    
+    .guide-card {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      height: 100%;
+      transition: all 0.3s ease;
+    }
+    
+    .guide-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(14, 165, 233, 0.2);
+    }
+    
+    .char-count {
+      background: rgba(14, 165, 233, 0.15);
+      color: #0ea5e9;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .number-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      margin-right: 15px;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .action-btn {
+      display: flex;
+      align-items: center;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .single-line {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .copied-animation {
+      animation: pulse 0.5s;
+    }
+    
+    .example-text {
+      background: rgba(14, 165, 233, 0.1);
+      border-left: 3px solid #0ea5e9;
+      padding: 10px 15px;
+      border-radius: 0 8px 8px 0;
+      margin: 10px 0;
+    }
+    
+    .id-display {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #0ea5e9;
+      text-align: center;
+      letter-spacing: 2px;
+      margin: 15px 0;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .id-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    
+    @media (max-width: 768px) {
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .action-btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .id-buttons {
+        flex-direction: column;
+      }
+      
+      .id-buttons .action-btn {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <main class="max-w-7xl mx-auto px-4 py-8">
+    <section class="mb-16">
+      <div class="mb-6">
+        <h3 class="text-2xl font-bold text-white flex items-center">
+          <i class="fas fa-align-left mr-3 text-primary"></i> Редактор текста книги
+        </h3>
+        <p class="text-gray-400 mt-1">
+          Преобразуйте текст книги в одну строку для публикации в библиотеке
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div>
+          <div class="text-tools flex justify-between mb-4">
+            <div class="flex items-center">
+              <span class="char-count" id="charCount">0 символов</span>
+            </div>
+          </div>
+          <textarea id="textEditor" class="text-editor w-full" placeholder="Введите текст вашей книги здесь..."></textarea>
+        </div>
+        
+        <div>
+          <h4 class="text-xl font-semibold text-white mb-4">Результат преобразования</h4>
+          <div id="resultPreview" class="text-editor bg-opacity-50 overflow-auto single-line">
+            <p class="text-gray-400">Здесь появится текст в одной строке без переносов</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-4">
+        <div class="example-text">
+          <p><strong>Что будет?</strong> Вместо многострочного текста с переносами, вы получите единую строку, готовую для вставки в библиотеку. Это нужно для экономии места в коде.</p>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button id="formatBtn" class="action-btn bg-primary text-white">
+          <i class="fas fa-broom mr-2"></i> Преобразовать в одну строку
+        </button>
+        
+        <button id="copyBtn" class="action-btn bg-purple-600 text-white">
+          <i class="fas fa-copy mr-2"></i> Скопировать текст
+        </button>
+        
+        <button id="clearBtn" class="action-btn bg-orange-600 text-white">
+          <i class="fas fa-trash-alt mr-2"></i> Удалить текст
+        </button>
+        
+        <a href="https://t.me/sun_community_chat/10053" 
+           class="action-btn bg-green-600 text-white"
+           target="_blank">
+          <i class="fab fa-telegram mr-2"></i> Отправить книгу
+        </a>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <div class="flex items-center mb-6">
+        <h3 class="text-2xl font-bold text-white flex items-center">
+          <i class="fas fa-id-card mr-3 text-primary"></i> Генератор ID книги
+        </h3>
+      </div>
+      
+      <div class="info-card">
+        <div class="grid grid-cols-1 gap-6">
+          <div>
+            <h4 class="text-xl font-semibold text-white mb-4">Уникальный идентификатор</h4>
+            <p class="text-gray-400 mb-4">
+              Сгенерируйте уникальный ID для вашей книги. ID используется для идентификации книги в системе.
+            </p>
+            
+            <div id="idDisplay" class="id-display">
+              Нажмите "Сгенерировать ID"
+            </div>
+            
+            <div class="id-buttons">
+              <button id="generateIdBtn" class="action-btn bg-primary text-white">
+                <i class="fas fa-key mr-2"></i> Сгенерировать ID
+              </button>
+              
+              <button id="copyIdBtn" class="action-btn bg-purple-600 text-white">
+                <i class="fas fa-copy mr-2"></i> Скопировать ID
+              </button>
+              
+              <button id="clearIdBtn" class="action-btn bg-orange-600 text-white">
+                <i class="fas fa-trash-alt mr-2"></i> Удалить ID
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <div class="flex items-center mb-6">
+        <h3 class="text-2xl font-bold text-white flex items-center">
+          <i class="fas fa-clipboard-list mr-3 text-primary"></i> Правила публикации книги
+        </h3>
+      </div>
+      
+      <div class="info-card">
+        <div class="grid grid-cols-1 gap-6">
+          <div>
+            <h4 class="text-xl font-semibold text-white mb-4">Основные требования</h4>
+            <ul class="space-y-3">
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                <span>Преобразуйте текст в одну строку</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                <span>Проверяйте текст на наличие ошибок перед публикацией</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                <span>Добавляйте оглавление для длинных книг</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-10">
+      <div class="flex items-center mb-6">
+        <h3 class="text-2xl font-bold text-white flex items-center">
+          <i class="fas fa-graduation-cap mr-3 text-primary"></i> Гайды по моду Textbook
+        </h3>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div class="guide-card">
+          <div class="flex items-center mb-4">
+            <div class="number-badge">1</div>
+            <h4 class="text-xl font-semibold">Основы работы</h4>
+          </div>
+          <p class="text-gray-400 mb-4">
+            Узнайте, как создавать, редактировать и публиковать книги с помощью мода Textbook.
+          </p>
+          <div class="bg-gray-800 rounded-lg h-48 mb-4 flex items-center justify-center">
+            <div class="text-6xl font-bold text-primary opacity-30">1</div>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="flex items-center mb-4">
+            <div class="number-badge">2</div>
+            <h4 class="text-xl font-semibold">Форматирование текста</h4>
+          </div>
+          <p class="text-gray-400 mb-4">
+            Специальные символы, цветовое оформление и другие возможности форматирования.
+          </p>
+          <div class="bg-gray-800 rounded-lg h-48 mb-4 flex items-center justify-center">
+            <div class="text-6xl font-bold text-primary opacity-30">2</div>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="flex items-center mb-4">
+            <div class="number-badge">3</div>
+            <h4 class="text-xl font-semibold">Публикация и библиотеки</h4>
+          </div>
+          <p class="text-gray-400 mb-4">
+            Как делиться своими книгами с сообществом и создавать библиотеки.
+          </p>
+          <div class="bg-gray-800 rounded-lg h-48 mb-4 flex items-center justify-center">
+            <div class="text-6xl font-bold text-primary opacity-30">3</div>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="flex items-center mb-4">
+            <div class="number-badge">4</div>
+            <h4 class="text-xl font-semibold">Продвинутые функции</h4>
+          </div>
+          <p class="text-gray-400 mb-4">
+            Работа с интерактивными элементами и ссылками в книгах.
+          </p>
+          <div class="bg-gray-800 rounded-lg h-48 mb-4 flex items-center justify-center">
+            <div class="text-6xl font-bold text-primary opacity-30">4</div>
+          </div>
+        </div>
+        
+        <div class="guide-card">
+          <div class="flex items-center mb-4">
+            <div class="number-badge">5</div>
+            <h4 class="text-xl font-semibold">Оптимизация</h4>
+          </div>
+          <p class="text-gray-400 mb-4">
+            Как сделать книги легкими и быстрыми для загрузки.
+          </p>
+          <div class="bg-gray-800 rounded-lg h-48 mb-4 flex items-center justify-center">
+            <div class="text-6xl font-bold text-primary opacity-30">5</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="text-center">
+      <a href="https://m1rotv0rets.github.io/Cobalt_Web/mods.html" 
+         class="px-8 py-4 rounded-lg font-bold text-lg flex items-center mx-auto w-fit bg-gold text-white hover:bg-yellow-500 transition-colors">
+        <i class="fas fa-download mr-3"></i> Скачать Textbook
+      </a>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const textEditor = document.getElementById('textEditor');
+      const resultPreview = document.getElementById('resultPreview');
+      const formatBtn = document.getElementById('formatBtn');
+      const copyBtn = document.getElementById('copyBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const charCount = document.getElementById('charCount');
+      const generateIdBtn = document.getElementById('generateIdBtn');
+      const copyIdBtn = document.getElementById('copyIdBtn');
+      const clearIdBtn = document.getElementById('clearIdBtn');
+      const idDisplay = document.getElementById('idDisplay');
+      
+      charCount.textContent = '0 символов';
+      
+      textEditor.addEventListener('input', function() {
+        const text = textEditor.value;
+        charCount.textContent = `${text.length} символов`;
+      });
+      
+      formatBtn.addEventListener('click', function() {
+        let text = textEditor.value;
+        text = text.replace(/\n/g, ' ');
+        text = text.replace(/\s+/g, ' ');
+        text = text.trim();
+        
+        if (text.length > 0) {
+          resultPreview.innerHTML = `<p>${text}</p>`;
+        } else {
+          resultPreview.innerHTML = '<p class="text-gray-400">Здесь появится текст в одной строке без переносов</p>';
+        }
+      });
+      
+      copyBtn.addEventListener('click', function() {
+        const resultText = resultPreview.innerText;
+        
+        if (!resultText || resultText.includes("Здесь появится")) {
+          alert("Сначала преобразуйте текст!");
+          return;
+        }
+        
+        navigator.clipboard.writeText(resultText)
+          .then(() => {
+            copyBtn.classList.add('copied-animation');
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Скопировано!';
+            
+            setTimeout(() => {
+              copyBtn.classList.remove('copied-animation');
+              copyBtn.innerHTML = originalText;
+            }, 2000);
+          })
+          .catch(err => {
+            console.error('Ошибка копирования: ', err);
+            alert("Не удалось скопировать текст");
+          });
+      });
+      
+      clearBtn.addEventListener('click', function() {
+        textEditor.value = '';
+        resultPreview.innerHTML = '<p class="text-gray-400">Здесь появится текст в одной строке без переносов</p>';
+        charCount.textContent = '0 символов';
+      });
+      
+      function generateRandomId() {
+        const min = 100000000;
+        const max = 999999999;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      
+      generateIdBtn.addEventListener('click', function() {
+        const newId = generateRandomId();
+        idDisplay.textContent = newId;
+        idDisplay.classList.add('text-green-500');
+        
+        setTimeout(() => {
+          idDisplay.classList.remove('text-green-500');
+        }, 1000);
+      });
+      
+      copyIdBtn.addEventListener('click', function() {
+        if (idDisplay.textContent === "Нажмите 'Сгенерировать ID'") {
+          alert("Сначала сгенерируйте ID!");
+          return;
+        }
+        
+        navigator.clipboard.writeText(idDisplay.textContent)
+          .then(() => {
+            copyIdBtn.classList.add('copied-animation');
+            const originalText = copyIdBtn.innerHTML;
+            copyIdBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Скопировано!';
+            
+            setTimeout(() => {
+              copyIdBtn.classList.remove('copied-animation');
+              copyIdBtn.innerHTML = originalText;
+            }, 2000);
+          })
+          .catch(err => {
+            console.error('Ошибка копирования ID: ', err);
+            alert("Не удалось скопировать ID");
+          });
+      });
+      
+      clearIdBtn.addEventListener('click', function() {
+        idDisplay.textContent = "Нажмите 'Сгенерировать ID'";
+        idDisplay.classList.add('text-red-500');
+        
+        setTimeout(() => {
+          idDisplay.classList.remove('text-red-500');
+        }, 1000);
+      });
+    });
+  </script>
+</body>
+</html>
