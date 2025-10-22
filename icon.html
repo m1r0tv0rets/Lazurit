@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cobalt Web</title>
+  <link rel="icon" href="Images/icon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0ea5e9',
+            dark: '#0f172a',
+            secondary: '#1e293b'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f1f5f9;
+      min-height: 100vh;
+    }
+    
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      transition: all 0.4s ease;
+      backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.85);
+    }
+    
+    .scrolled {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .icon-card {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .icon-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.3);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.5);
+    }
+    
+    .format-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(14, 165, 233, 0.2);
+      color: #7dd3fc;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .format-badge:hover, .format-badge.active {
+      background: rgba(14, 165, 233, 0.4);
+      transform: translateY(-2px);
+    }
+    
+    .icon-preview {
+      font-size: 64px;
+      color: #0ea5e9;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    
+    .input-field {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
+    }
+    
+    .loading {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .cobalt-header {
+      background: linear-gradient(90deg, #0ea5e9, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(14, 165, 233, 0.3);
+    }
+    
+    .preview-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    
+    .quality-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+    }
+    
+    .quality-option input {
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body class="bg-dark text-gray-200">
+  <header class="sticky-header">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center mr-3">
+          <i class="fas fa-globe text-white"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-white">Cobalt Web</h1>
+      </div>
+      
+      <a href="index.html" class="text-white hover:text-primary transition-colors flex items-center text-xl">
+        <i class="fas fa-home"></i>
+      </a>
+    </div>
+  </header>
+
+  <div class="min-h-screen flex items-center justify-center p-4 py-10">
+    <div class="max-w-4xl w-full">
+      <div class="icon-card p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <div class="mb-6">
+              <label class="block text-gray-300 mb-2 flex items-center">
+                <i class="fas fa-font mr-2 text-primary"></i> Введите название иконки
+              </label>
+              <div class="relative">
+                <input 
+                  type="text" 
+                  id="iconText" 
+                  class="input-field" 
+                  placeholder="Введите название иконки (например: user)"
+                  value="user"
+                >
+                <button id="copyButton" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary">
+                  <i class="fas fa-copy"></i>
+                </button>
+              </div>
+              <p class="text-sm text-gray-400 mt-2">Используйте названия иконок из Font Awesome</p>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 mb-2 flex items-center">
+                <i class="fas fa-palette mr-2 text-primary"></i> Цвет иконки
+              </label>
+              <input type="color" id="iconColor" value="#0ea5e9" class="w-full h-10">
+            </div>
+
+            <div class="mb-6">
+              <label class="block text-gray-300 mb-2 flex items-center">
+                <i class="fas fa-brush mr-2 text-primary"></i> Качество изображения
+              </label>
+              <div class="bg-secondary p-4 rounded-lg">
+                <div class="quality-option">
+                  <input type="radio" id="quality-high" name="quality" value="2" checked>
+                  <label for="quality-high">Высокое (2x)</label>
+                </div>
+                <div class="quality-option">
+                  <input type="radio" id="quality-veryhigh" name="quality" value="3">
+                  <label for="quality-veryhigh">Очень высокое (3x)</label>
+                </div>
+                <div class="quality-option">
+                  <input type="radio" id="quality-ultra" name="quality" value="4">
+                  <label for="quality-ultra">Ультра (4x) - для больших иконок</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="mb-6">
+              <label class="block text-gray-300 mb-2 flex items-center">
+                <i class="fas fa-eye mr-2 text-primary"></i> Предпросмотр
+              </label>
+              <div class="bg-secondary rounded-xl p-8 flex items-center justify-center h-96">
+                <div class="preview-container">
+                  <i class="fas fa-user icon-preview" id="previewIcon"></i>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-6">
+              <label class="block text-gray-300 mb-2 flex items-center">
+                <i class="fas fa-download mr-2 text-primary"></i> Скачать в формате
+              </label>
+              <div class="flex flex-wrap">
+                <div class="format-badge active" data-format="png">
+                  <i class="fas fa-image mr-2"></i> PNG
+                </div>
+                <div class="format-badge" data-format="jpg">
+                  <i class="fas fa-file-image mr-2"></i> JPG
+                </div>
+                <div class="format-badge" data-format="webp">
+                  <i class="fas fa-project-diagram mr-2"></i> WEBP
+                </div>
+                <div class="format-badge" data-format="svg">
+                  <i class="fas fa-file-code mr-2"></i> SVG
+                </div>
+              </div>
+            </div>
+            
+            <button id="downloadButton" class="btn-primary px-6 py-3 rounded-lg font-medium text-white flex items-center justify-center w-full">
+              <div class="loading"></div>
+              <i class="fas fa-download mr-2"></i> Скачать иконку
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const iconText = document.getElementById('iconText');
+      const previewIcon = document.getElementById('previewIcon');
+      const formatBadges = document.querySelectorAll('.format-badge');
+      const copyButton = document.getElementById('copyButton');
+      const downloadButton = document.getElementById('downloadButton');
+      const iconColor = document.getElementById('iconColor');
+      const loading = document.querySelector('.loading');
+      const qualityOptions = document.querySelectorAll('input[name="quality"]');
+      
+      let currentFormat = 'png';
+      let currentIconName = 'user';
+      let currentQuality = 2;
+      
+      qualityOptions.forEach(option => {
+        option.addEventListener('change', function() {
+          currentQuality = parseInt(this.value);
+        });
+      });
+      
+      iconText.addEventListener('input', function() {
+        updateIconPreview();
+      });
+      
+      formatBadges.forEach(badge => {
+        badge.addEventListener('click', function() {
+          formatBadges.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentFormat = this.getAttribute('data-format');
+        });
+      });
+      
+      iconColor.addEventListener('input', function() {
+        previewIcon.style.color = this.value;
+      });
+      
+      copyButton.addEventListener('click', function() {
+        iconText.select();
+        document.execCommand('copy');
+        
+        const originalIcon = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-check"></i>';
+        
+        setTimeout(() => {
+          this.innerHTML = originalIcon;
+        }, 2000);
+      });
+      
+      downloadButton.addEventListener('click', function() {
+        loading.style.display = 'block';
+        downloadButton.disabled = true;
+        
+        const size = 200; 
+        const padding = 150; 
+        
+        const container = document.createElement('div');
+        container.style.display = 'flex';
+        container.style.alignItems = 'center';
+        container.style.justifyContent = 'center';
+        container.style.width = `${size + padding * 2}px`;
+        container.style.height = `${size + padding * 2}px`;
+        container.style.backgroundColor = '#ffffff';
+        container.style.padding = `${padding}px`;
+        
+        const iconClone = previewIcon.cloneNode(true);
+        iconClone.style.fontSize = `${size}px`;
+        iconClone.style.color = iconColor.value;
+        container.appendChild(iconClone);
+        
+        document.body.appendChild(container);
+        
+        if (currentFormat !== 'svg') {
+
+          html2canvas(container, {
+            backgroundColor: '#ffffff',
+            scale: currentQuality, 
+            width: size + padding * 2,
+            height: size + padding * 2,
+            logging: false,
+            useCORS: true,
+            allowTaint: true,
+            onclone: function(clonedDoc, element) {
+              element.style.display = 'flex';
+        
+              const icon = element.querySelector('i');
+              if (icon) {
+                icon.style.textRendering = 'geometricPrecision';
+                icon.style.webkitFontSmoothing = 'antialiased';
+                icon.style.mozOsxFontSmoothing = 'grayscale';
+              }
+            }
+          }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `icon-${currentIconName}-${size}x${size}.${currentFormat}`;
+            
+            if (currentFormat === 'jpg') {
+              link.href = canvas.toDataURL('image/jpeg', 1.0); // Максимальное качество для JPG
+            } else if (currentFormat === 'webp') {
+
+              try {
+                link.href = canvas.toDataURL('image/webp', 1.0);
+              } catch (e) {
+                alert('Ваш браузер не поддерживает создание WebP изображений. Используйте PNG или JPG.');
+                link.href = canvas.toDataURL('image/png');
+              }
+            } else {
+              link.href = canvas.toDataURL('image/png');
+            }
+            
+            link.click();
+            document.body.removeChild(container);
+            loading.style.display = 'none';
+            downloadButton.disabled = false;
+          }).catch(error => {
+            console.error('Ошибка при создании изображения:', error);
+            loading.style.display = 'none';
+            downloadButton.disabled = false;
+            document.body.removeChild(container);
+          });
+        } else {
+          const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+            <rect width="100%" height="100%" fill="white"/>
+            <style>
+              @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+              text { 
+                font-family: 'Font Awesome 6 Free'; 
+                font-size: ${size * 0.75}px; 
+                fill: ${iconColor.value}; 
+                font-weight: 400;
+                dominant-baseline: middle; 
+                text-anchor: middle;
+                text-rendering: geometricPrecision;
+              }
+            </style>
+            <text x="50%" y="52%">${getIconUnicode()}</text>
+          </svg>`;
+          
+          const svgBlob = new Blob([svgContent], {type: 'image/svg+xml'});
+          const svgUrl = URL.createObjectURL(svgBlob);
+          
+          const link = document.createElement('a');
+          link.download = `icon-${currentIconName}-${size}x${size}.svg`;
+          link.href = svgUrl;
+          link.click();
+          
+          document.body.removeChild(container);
+          loading.style.display = 'none';
+          downloadButton.disabled = false;
+          
+          setTimeout(() => {
+            URL.revokeObjectURL(svgUrl);
+          }, 100);
+        }
+      });
+      
+      function updateIconPreview() {
+        currentIconName = iconText.value.trim() || 'user';
+        previewIcon.className = `fas fa-${currentIconName} icon-preview`;
+        previewIcon.style.color = iconColor.value;
+      }
+      
+      function getIconUnicode() {
+        const iconMap = {
+          'user': '&#xf007;',
+          'home': '&#xf015;',
+          'cog': '&#xf013;',
+          'heart': '&#xf004;',
+          'star': '&#xf005;',
+          'search': '&#xf002;',
+          'envelope': '&#xf0e0;',
+          'bell': '&#xf0f3;',
+          'camera': '&#xf030;',
+          'music': '&#xf001;',
+          'book': '&#xf02d;',
+          'calendar': '&#xf073;',
+          'check': '&#xf00c;',
+          'times': '&#xf00d;',
+          'lock': '&#xf023;',
+          'unlock': '&#xf09c;',
+          'github': '&#xf09b;',
+          'twitter': '&#xf099;',
+          'facebook': '&#xf09a;',
+          'instagram': '&#xf16d;',
+          'linkedin': '&#xf0e1;',
+          'youtube': '&#xf167;'
+        };
+        
+        return iconMap[currentIconName] || '&#xf059;';
+      }
+      
+      updateIconPreview();
+      
+      window.addEventListener('scroll', function() {
+        const header = document.querySelector('header');
+        if (window.scrollY > 10) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
