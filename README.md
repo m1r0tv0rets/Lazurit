@@ -5,7 +5,7 @@
 ### 🔧 Рабочие инструменты
 
 - **🤖 Бот**
-- **📚 Библиотека**
+- **📚 Библиотека** https://m1r0tv0rets.github.io/Lazurit/books.html
 - **📝 Редактор книг** https://m1r0tv0rets.github.io/Lazurit/read.html
 - **📃 Стилизованный текст** https://m1r0tv0rets.github.io/Lazurit/text.html
 - **🗓 Заметки** https://m1r0tv0rets.github.io/Lazurit/notes.html
