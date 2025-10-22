@@ -13,6 +13,7 @@
 - **📑 Майнкрафт Логи** https://m1r0tv0rets.github.io/Lazurit/logs.html
 - **🖼 Иконки скачать** https://m1r0tv0rets.github.io/Lazurit/icon.html
 - **📦 Моды майнкрафт** https://m1r0tv0rets.github.io/Lazurit/mods.html
+- **🖋 Редакторы текста майнкрафт** https://m1r0tv0rets.github.io/Lazurit/mine_text.html
 
 ## 🌟 Особенности проекта
 
