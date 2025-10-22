@@ -12,6 +12,7 @@
 - **🗃 Тестер html** https://m1r0tv0rets.github.io/Lazurit/test.html
 - **📑 Майнкрафт Логи** https://m1r0tv0rets.github.io/Lazurit/logs.html
 - **🖼 Иконки скачать** https://m1r0tv0rets.github.io/Lazurit/icon.html
+- **📦 Моды майнкрафт** https://m1r0tv0rets.github.io/Lazurit/mods.html
 
 ## 🌟 Особенности проекта
 
