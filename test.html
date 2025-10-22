@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Tester</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-200 min-h-screen">
+<div class="container mx-auto px-4 py-6">
+<div class="flex items-center justify-center mb-8">
+<i class="fas fa-code text-blue-400 text-4xl mr-4"></i>
+<h1 class="text-3xl font-bold text-blue-400">HTML Tester</h1>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[70vh]">
+<div class="flex flex-col border border-blue-800 rounded-lg bg-slate-800">
+<div class="flex items-center justify-between p-4 border-b border-blue-800">
+<div class="flex items-center">
+<i class="fas fa-edit text-blue-400 mr-2"></i>
+<span class="font-semibold">Редактор кода</span>
+</div>
+<button onclick="updatePreview()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
+<i class="fas fa-play mr-2"></i>
+Запустить
+</button>
+</div>
+<textarea id="htmlCode" class="flex-grow p-4 bg-slate-800 text-slate-200 resize-none focus:outline-none font-mono text-lg">
+<div class="p-6 text-center">
+<h1 class="text-4xl font-bold text-blue-400 mb-4">Добро пожаловать!</h1>
+<p class="text-xl text-slate-300 mb-6">Начните писать HTML код</p>
+<button class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors">
+Начать работу
+</button>
+</div>
+</textarea>
+</div>
+
+<div class="flex flex-col border border-blue-800 rounded-lg bg-slate-800">
+<div class="flex items-center p-4 border-b border-blue-800">
+<i class="fas fa-eye text-blue-400 mr-2"></i>
+<span class="font-semibold">Предпросмотр</span>
+</div>
+<iframe id="preview" class="flex-grow bg-white rounded-b-lg"></iframe>
+</div>
+</div>
+
+<div class="mt-6 text-center text-slate-400">
+<p class="flex items-center justify-center">
+<i class="fas fa-lightbulb mr-2 text-yellow-400"></i>
+Введите HTML код в левой панели и нажмите "Запустить"
+</p>
+</div>
+</div>
+
+<script>
+function updatePreview() {
+const htmlCode = document.getElementById('htmlCode').value;
+const preview = document.getElementById('preview');
+const previewDocument = preview.contentWindow.document;
+    
+previewDocument.open();
+previewDocument.write(htmlCode);
+previewDocument.close();
+}
+
+document.getElementById('htmlCode').addEventListener('input', function() {
+clearTimeout(this.timer);
+this.timer = setTimeout(updatePreview, 500);
+});
+
+updatePreview();
+</script>
+</body>
+</html>
