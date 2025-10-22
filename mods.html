@@ -1,0 +1,2654 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cobalt Моды</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#0ea5e9',
+            dark: '#0f172a',
+            card: '#1e293b',
+            darker: '#0a1120',
+            success: '#10b981',
+            warning: '#f59e0b',
+            danger: '#ef4444',
+            shader: '#8b5cf6',
+            forge: '#d97706',
+            fabric: '#0ea5e9',
+            quilt: '#8b5cf6',
+            liteloader: '#f59e0b',
+            rift: '#10b981',
+            translate: '#8b5cf6'
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'pulse-translate': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      scroll-behavior: smooth;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f1f5f9;
+      min-height: 100vh;
+    }
+    
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      transition: all 0.4s ease;
+      backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.85);
+    }
+    
+    .scrolled {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    .burger-line {
+      display: block;
+      height: 2px;
+      width: 25px;
+      background: white;
+      margin: 5px auto;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .mobile-menu.open {
+      max-height: 300px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+    }
+    
+    .form-input {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(30, 41, 59, 0.95);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      border-left: 4px solid #0ea5e9;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transform: translateX(120%);
+      transition: transform 0.4s ease;
+      z-index: 1000;
+      max-width: 350px;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .mod-card {
+      transition: all 0.3s ease;
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .mod-card:hover {
+      transform: translateY(-8px);
+    }
+    
+    .card-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 2;
+    }
+    
+    .badge-mod {
+      background: #0ea5e9;
+    }
+    
+    .badge-resourcepack {
+      background: #10b981;
+    }
+    
+    .badge-datapack {
+      background: #f59e0b;
+    }
+    
+    .badge-shader {
+      background: #8b5cf6;
+    }
+    
+    .card-image {
+      height: 300px; 
+      width: 100%;
+      background: #0a1120;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .card-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.5s ease;
+    }
+    
+    .mod-card:hover .card-image img {
+      transform: scale(1.1); 
+    }
+    
+    .image-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .loader-spinner {
+      border: 4px solid rgba(14, 165, 233, 0.2);
+      border-top: 4px solid #0ea5e9;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .version-tag {
+      background: rgba(14, 165, 233, 0.15);
+      color: #0ea5e9;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+    }
+    
+    .loader-tag {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+    
+    .sort-btn {
+      padding: 8px 15px;
+      border-radius: 6px;
+      background: rgba(30, 41, 59, 0.8);
+      color: #f1f5f9;
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+    }
+    
+    .sort-btn.active {
+      background: #0ea5e9;
+      color: white;
+    }
+    
+    .page-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(30, 41, 59, 0.8);
+      color: #f1f5f9;
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .page-btn:hover, .page-btn.active {
+      background: #0ea5e9;
+      color: white;
+    }
+    
+    .chat-bot {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      cursor: pointer;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+    
+    .chat-bot:hover {
+      transform: scale(1.1);
+    }
+    
+    .chat-container {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      height: 450px;
+      background: rgba(30, 41, 59, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      display: flex;
+      flex-direction: column;
+      z-index: 99;
+      overflow: hidden;
+      transform: translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+    
+    .chat-container.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .chat-header {
+      background: rgba(15, 23, 42, 0.9);
+      padding: 15px;
+      border-bottom: 1px solid rgba(14, 165, 233, 0.2);
+      display: flex;
+      align-items: center;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .message {
+      max-width: 80%;
+      padding: 10px 15px;
+      border-radius: 18px;
+      font-size: 14px;
+    }
+    
+    .bot-message {
+      background: rgba(14, 165, 233, 0.2);
+      border-bottom-left-radius: 5px;
+      align-self: flex-start;
+    }
+    
+    .user-message {
+      background: rgba(14, 165, 233, 0.4);
+      border-bottom-right-radius: 5px;
+      align-self: flex-end;
+    }
+    
+    .chat-input-container {
+      padding: 15px;
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid rgba(14, 165, 233, 0.2);
+    }
+    
+    .download-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .download-modal.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .modal-content {
+      background: rgba(30, 41, 59, 0.95);
+      border-radius: 15px;
+      padding: 25px;
+      width: 90%;
+      max-width: 500px;
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    
+    .versions-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 15px 0;
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 10px;
+      padding: 10px;
+    }
+    
+    .dependencies-list {
+      max-height: 150px;
+      overflow-y: auto;
+      margin: 15px 0;
+      border: 1px solid rgba(14, 165, 233, 0.2);
+      border-radius: 10px;
+      padding: 10px;
+    }
+    
+    .version-item {
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: rgba(15, 23, 42, 0.6);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .version-item:hover {
+      background: rgba(14, 165, 233, 0.2);
+    }
+    
+    .favorite-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(30, 41, 59, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f1f5f9;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 2;
+    }
+    
+    .favorite-btn.active {
+      color: #f59e0b;
+    }
+    
+    .tab-btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: rgba(30, 41, 59, 0.7);
+      color: #f1f5f9;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+    }
+    
+    .tab-btn.active {
+      background: #0ea5e9;
+      color: white;
+    }
+    
+    .loader-tag {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      display: inline-block;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+    
+    .loader-forge {
+      background: rgba(217, 119, 6, 0.15);
+      color: #d97706;
+    }
+    
+    .loader-fabric {
+      background: rgba(14, 165, 233, 0.15);
+      color: #0ea5e9;
+    }
+    
+    .loader-quilt {
+      background: rgba(139, 92, 246, 0.15);
+      color: #8b5cf6;
+    }
+    
+    .loader-liteloader {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+    }
+    
+    .loader-rift {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+    }
+    
+    .dependency-item {
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.6);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .dependency-name {
+      flex: 1;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .dependency-name:hover {
+      color: #0ea5e9;
+      text-decoration: underline;
+    }
+    
+    .dependency-required {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      margin: 0 8px;
+    }
+    
+    .dependency-optional {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      margin: 0 8px;
+    }
+    
+    .modal-section {
+      margin-bottom: 15px;
+    }
+    
+    .modal-section-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #0ea5e9;
+      display: flex;
+      align-items: center;
+    }
+    
+    .loader-select {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.6);
+      color: white;
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      margin-top: 5px;
+    }
+    
+    .dependency-btn {
+      background: rgba(14, 165, 233, 0.2);
+      color: white;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .dependency-btn:hover {
+      background: rgba(14, 165, 233, 0.3);
+    }
+    
+    .dependency-btn i {
+      margin-right: 4px;
+    }
+    
+    .loader-spinner-small {
+      border: 2px solid rgba(14, 165, 233, 0.2);
+      border-top: 2px solid #0ea5e9;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    
+    .version-tag i {
+      margin-right: 4px;
+    }
+    
+    .loader-icon {
+      display: inline-block;
+      margin-right: 4px;
+      width: 14px;
+      text-align: center;
+    }
+    
+    .filter-icon {
+      margin-right: 8px;
+    }
+    
+    .pagination-icon {
+      font-size: 12px;
+    }
+    
+    .star-animation {
+      animation: pulse-star 0.8s;
+    }
+    
+    .btn-translate {
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      font-weight: 500;
+    }
+    
+    .btn-translate:hover {
+      transform: translateY(-3px);
+    }
+    
+    .translate-loading {
+      animation: pulse-translate 1s infinite;
+    }
+    
+    .chat-btn {
+      background: rgba(14, 165, 233, 0.2);
+      color: white;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      margin: 4px;
+    }
+    
+    .chat-btn:hover {
+      background: rgba(14, 165, 233, 0.3);
+    }
+    
+    .search-container {
+      position: relative;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      pointer-events: none;
+    }
+    
+    .search-input {
+      padding-left: 40px;
+    }
+    
+    @keyframes pulse-star {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.5); }
+      100% { transform: scale(1); }
+    }
+    
+    @media (min-width: 768px) {
+      .desktop-menu {
+        display: flex;
+        gap: 20px;
+      }
+      .burger-btn-container {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 767px) {
+      .desktop-menu {
+        display: none;
+      }
+      .burger-btn-container {
+        display: block;
+      }
+      .card-image {
+        height: 180px;
+      }
+      .chat-container {
+        width: 90%;
+        right: 5%;
+        height: 70vh;
+      }
+      .modal-content {
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .chat-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body class="bg-dark text-gray-200">
+  <header class="sticky-header">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center mr-3">
+          <i class="fas fa-cube text-white"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-white">Cobalt Моды</h1>
+      </div>
+      
+      <div class="desktop-menu">
+        <a href="index.html" class="hover:text-primary transition-colors flex items-center">
+          <i class="fas fa-home mr-2"></i> Главная
+        </a> 
+        <a href="notes.html" class="hover:text-primary transition-colors flex items-center">
+          <i class="fas fa-sticky-note mr-2"></i> Заметки
+        </a>
+        <a href="launcher.html" class="hover:text-primary transition-colors flex items-center">
+          <i class="fas fa-rocket mr-2"></i> Лаунчер
+        </a>
+        <a href="https://t.me/sun_community_chat" class="hover:text-primary transition-colors flex items-center">
+          <i class="fas fa-users mr-2"></i> Сообщество
+        </a>
+      </div>
+      
+      <div class="burger-btn-container">
+        <button id="burgerBtn" class="text-white focus:outline-none z-50">
+          <div class="burger-line"></div>
+          <div class="burger-line"></div>
+          <div class="burger-line"></div>
+        </button>
+      </div>
+    </div>
+    
+    <div id="mobileMenu" class="mobile-menu bg-gray-900">
+      <div class="flex flex-col px-6 py-4">
+        <a href="index.html" class="py-3 hover:text-primary transition-colors flex items-center">
+          <i class="fas fa-home mr-3 w-5"></i> Главная
+        </a> 
+        <a href="notes.html" class="py-3 hover:text-primary transition-colors flex items-center">
+          <i class="fas fa-sticky-note mr-3 w-5"></i> Заметки
+        </a>
+        <a href="launcher.html" class="py-3 hover:text-primary transition-colors flex items-center">
+          <i class="fas fa-rocket mr-3 w-5"></i> Лаунчер
+        </a>
+        <a href="https://t.me/sun_community_chat" class="py-3 hover:text-primary transition-colors flex items-center">
+          <i class="fas fa-users mr-3 w-5"></i> Сообщество
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div id="notification" class="notification">
+    <div class="notification-title">
+      <i class="fas fa-info-circle mr-2"></i> Информация
+    </div>
+    <div id="notificationContent">Поиск модов выполнен успешно</div>
+  </div>
+
+  <div class="download-modal" id="downloadModal">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-white flex items-center">
+          <i class="fas fa-download mr-2 text-primary"></i> Установка
+        </h3>
+        <button id="closeModal" class="text-gray-400 hover:text-white">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="modTitle" class="font-medium mb-2"></div>
+      
+      <div class="modal-section">
+        <div class="modal-section-title">
+          <i class="fas fa-code-branch mr-2"></i> Версия
+        </div>
+        <div class="versions-list" id="versionsList">
+        </div>
+      </div>
+      
+      <div class="modal-section">
+        <div class="modal-section-title">
+          <i class="fas fa-plug mr-2"></i> Модлоадер
+        </div>
+        <select id="modLoaderSelect" class="loader-select">
+        </select>
+      </div>
+      
+      <div class="modal-section">
+        <div class="modal-section-title">
+          <i class="fas fa-link mr-2"></i> Зависимости
+        </div>
+        <div class="dependencies-list" id="dependenciesList">
+          <div class="text-center py-4 text-gray-400">Загрузка зависимостей...</div>
+        </div>
+      </div>
+      
+      <button id="downloadBtn" class="btn-primary w-full mt-4 py-3 rounded-lg font-medium text-white flex items-center justify-center">
+        <i class="fas fa-download mr-2"></i> Скачать с зависимостями
+      </button>
+    </div>
+  </div>
+
+  <div class="chat-bot" id="chatBotBtn">
+    <i class="fas fa-robot"></i>
+  </div>
+  
+  <div class="chat-container" id="chatContainer">
+    <div class="chat-header">
+      <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center mr-3">
+        <i class="fas fa-robot text-white text-sm"></i>
+      </div>
+      <h3 class="font-bold">Помощник по Minecraft</h3>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot-message">
+        <p>Привет! Я помогу тебе выбрать моды, ресурспаки и шейдеры для Minecraft. Выберите категорию:</p>
+        <div class="grid grid-cols-2 gap-2 mt-2">
+          <button class="chat-btn" data-query="моды магия">Моды: Магия</button>
+          <button class="chat-btn" data-query="моды оптимизация">Моды: Оптимизация</button>
+          <button class="chat-btn" data-query="ресурспаки реализм">Ресурспаки: Реализм</button>
+          <button class="chat-btn" data-query="шейдеры реалистичные">Шейдеры: Реалистичные</button>
+          <button class="chat-btn" data-query="шейдеры легкие">Шейдеры: Легкие</button>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-container">
+      <div class="flex">
+        <input 
+          type="text" 
+          id="chatInput" 
+          class="form-input flex-1" 
+          placeholder="Введите ваш вопрос..."
+        >
+        <button id="sendMessageBtn" class="btn-primary ml-3 px-4 rounded-lg">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <section class="py-10 px-4 relative">
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-card rounded-xl p-6 border border-primary/20">
+        <h2 class="text-2xl font-bold mb-6 text-white flex items-center">
+          <i class="fas fa-search mr-3 text-primary"></i> Поиск контента для Minecraft
+        </h2>
+        
+        <div class="mb-6">
+          <div class="search-container">
+            <div class="search-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <input 
+              type="text" 
+              id="searchInput" 
+              class="w-full form-input search-input" 
+              placeholder="Введите запрос"
+            >
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div>
+            <label class="block text-gray-300 mb-2"><i class="fas fa-filter mr-2"></i>Тип контента</label>
+            <select id="contentType" class="w-full form-input">
+              <option value="mod">Моды</option>
+              <option value="resourcepack">Ресурспаки</option>
+              <option value="datapack">Датапаки</option>
+              <option value="shader">Шейдеры</option>
+              <option value="modpack">Сборки</option>
+              <option value="">Все типы</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-gray-300 mb-2"><i class="fas fa-gamepad mr-2"></i>Версия Minecraft</label>
+            <select id="mcVersion" class="w-full form-input">
+              <option value="1.20.1">1.20.1</option>
+              <option value="1.20">1.20</option>
+              <option value="1.19.4">1.19.4</option>
+              <option value="1.19.2">1.19.2</option>
+              <option value="1.18.2">1.18.2</option>
+              <option value="1.17.1">1.17.1</option>
+              <option value="1.16.5">1.16.5</option>
+              <option value="1.15.2">1.15.2</option>
+              <option value="">Любая версия</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-gray-300 mb-2"><i class="fas fa-microchip mr-2"></i>Модлоадер</label>
+            <select id="modLoader" class="w-full form-input">
+              <option value="">Все модлоадеры</option>
+              <option value="forge">Forge</option>
+              <option value="fabric">Fabric</option>
+              <option value="quilt">Quilt</option>
+              <option value="liteloader">LiteLoader</option>
+              <option value="rift">Rift</option>
+              <option value="neoforge">NeoForge</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="flex flex-wrap gap-3">
+          <button 
+            id="searchBtn" 
+            class="btn-primary px-6 py-3 rounded-lg font-medium text-white flex items-center"
+          >
+            <i class="fas fa-search mr-2"></i> Найти
+          </button>
+          
+          <button 
+            id="resetBtn" 
+            class="bg-gray-700 px-6 py-3 rounded-lg font-medium text-white flex items-center"
+          >
+            <i class="fas fa-redo mr-2"></i> Сбросить
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-10 px-4 relative">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex flex-wrap gap-3 mb-6">
+        <button class="tab-btn active" id="searchTab">
+          <i class="fas fa-search mr-2"></i> Поиск
+        </button>
+        <button class="tab-btn" id="favoritesContentTab">
+          <i class="fas fa-star mr-2"></i> Избранное
+        </button>
+        <button class="tab-btn" id="trendingTab">
+          <i class="fas fa-fire mr-2"></i> Популярное
+        </button>
+      </div>
+      
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <h2 class="text-2xl font-bold text-white flex items-center mb-4 md:mb-0">
+          <i class="fas fa-cubes mr-3 text-primary"></i> <span id="resultsTitle">Результаты поиска</span>
+          <span id="resultsCounter" class="ml-2 bg-primary/20 text-primary text-sm font-medium px-3 py-1 rounded-full">0</span>
+        </h2>
+        
+        <div class="flex flex-wrap gap-2" id="sortButtons">
+          <button class="sort-btn active" data-sort="relevance">
+            <i class="fas fa-bullseye filter-icon"></i>По релевантности
+          </button>
+          <button class="sort-btn" data-sort="downloads">
+            <i class="fas fa-download filter-icon"></i>По загрузкам
+          </button>
+          <button class="sort-btn" data-sort="updated">
+            <i class="fas fa-sync filter-icon"></i>По обновлению
+          </button>
+          <button class="sort-btn" data-sort="follows">
+            <i class="fas fa-heart filter-icon"></i>По подписчикам
+          </button>
+        </div>
+      </div>
+      
+      <div id="resultsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="bg-card rounded-xl p-10 text-center border border-dashed border-primary/30">
+          <div class="text-5xl text-primary/50 mb-4">
+            <i class="fas fa-cube"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-gray-300">Начните поиск модов</h3>
+          <p class="text-gray-400 mb-4">Введите запрос в поле выше, чтобы найти моды, ресурспаки и шейдеры</p>
+        </div>
+      </div>
+      
+      <div class="flex justify-center mt-8 gap-2" id="pagination"></div>
+    </div>
+  </section>
+
+  <script>
+    const burgerBtn = document.getElementById('burgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const resultsCounter = document.getElementById('resultsCounter');
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const notification = document.getElementById('notification');
+    const notificationContent = document.getElementById('notificationContent');
+    const pagination = document.getElementById('pagination');
+    const sortButtons = document.querySelectorAll('.sort-btn');
+    const favoritesContentTab = document.getElementById('favoritesContentTab');
+    const searchTab = document.getElementById('searchTab');
+    const trendingTab = document.getElementById('trendingTab');
+    const chatBotBtn = document.getElementById('chatBotBtn');
+    const chatContainer = document.getElementById('chatContainer');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
+    const downloadModal = document.getElementById('downloadModal');
+    const closeModal = document.getElementById('closeModal');
+    const versionsList = document.getElementById('versionsList');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const modTitle = document.getElementById('modTitle');
+    const resultsTitle = document.getElementById('resultsTitle');
+    const modLoaderSelect = document.getElementById('modLoaderSelect');
+    const dependenciesList = document.getElementById('dependenciesList');
+    const modLoaderFilter = document.getElementById('modLoader');
+    
+    let currentPage = 1;
+    let totalPages = 1;
+    let currentSort = 'relevance';
+    let currentQuery = '';
+    let currentType = 'mod';
+    let currentVersion = '1.20.1';
+    let currentLoader = '';
+    let favorites = JSON.parse(localStorage.getItem('mcFavorites')) || [];
+    let currentMod = null;
+    let selectedVersion = null;
+    let downloadUrl = null;
+    let selectedLoader = null;
+    let dependencies = [];
+    let currentVersionData = null;
+    let translationsCache = {};
+    
+    function toggleMobileMenu() {
+      mobileMenu.classList.toggle('open');
+      const lines = document.querySelectorAll('.burger-line');
+      if (mobileMenu.classList.contains('open')) {
+        lines[0].style.transform = 'translateY(7px) rotate(45deg)';
+        lines[1].style.opacity = '0';
+        lines[2].style.transform = 'translateY(-7px) rotate(-45deg)';
+      } else {
+        lines[0].style.transform = 'none';
+        lines[1].style.opacity = '1';
+        lines[2].style.transform = 'none';
+      }
+    }
+
+    burgerBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleMobileMenu();
+    });
+    
+    document.addEventListener('click', function(e) {
+      if (mobileMenu.classList.contains('open') && 
+          !mobileMenu.contains(e.target) && 
+          !burgerBtn.contains(e.target)) {
+        toggleMobileMenu();
+      }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
+        toggleMobileMenu();
+      }
+    });
+
+    const menuItems = mobileMenu.querySelectorAll('a');
+    menuItems.forEach(item => {
+      item.addEventListener('click', function() {
+        setTimeout(() => {
+          if (mobileMenu.classList.contains('open')) {
+            toggleMobileMenu();
+          }
+        }, 300);
+      });
+    });
+
+    window.addEventListener('scroll', function() {
+      const header = document.querySelector('header');
+      if (window.scrollY > 10) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+    
+    function showNotification(message) {
+      notificationContent.textContent = message;
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    }
+    
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+    
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    }
+    
+    function getBadgeClass(type) {
+      switch(type) {
+        case 'mod': return 'badge-mod';
+        case 'resourcepack': return 'badge-resourcepack';
+        case 'datapack': return 'badge-datapack';
+        case 'shader': return 'badge-shader';
+        case 'modpack': return 'badge-mod';
+        default: return 'badge-mod';
+      }
+    }
+    
+    function getBadgeText(type) {
+      switch(type) {
+        case 'mod': return 'Мод';
+        case 'resourcepack': return 'Ресурспак';
+        case 'datapack': return 'Датапак';
+        case 'shader': return 'Шейдер';
+        case 'modpack': return 'Сборка';
+        default: return type;
+      }
+    }
+    
+    function getLoaderClass(loader) {
+      switch(loader) {
+        case 'forge': return 'loader-forge';
+        case 'fabric': return 'loader-fabric';
+        case 'quilt': return 'loader-quilt';
+        case 'liteloader': return 'loader-liteloader';
+        case 'rift': return 'loader-rift';
+        case 'neoforge': return 'loader-forge';
+        default: return '';
+      }
+    }
+    
+    function getLoaderName(loader) {
+      switch(loader) {
+        case 'forge': return 'Forge';
+        case 'fabric': return 'Fabric';
+        case 'quilt': return 'Quilt';
+        case 'liteloader': return 'LiteLoader';
+        case 'rift': return 'Rift';
+        case 'neoforge': return 'NeoForge';
+        default: return loader;
+      }
+    }
+    
+    function getLoaderIcon(loader) {
+      switch(loader) {
+        case 'forge': return '<i class="fas fa-fire loader-icon"></i>';
+        case 'fabric': return '<i class="fas fa-cut loader-icon"></i>';
+        case 'quilt': return '<i class="fas fa-layer-group loader-icon"></i>';
+        case 'liteloader': return '<i class="fas fa-feather-alt loader-icon"></i>';
+        case 'rift': return '<i class="fas fa-plug loader-icon"></i>';
+        case 'neoforge': return '<i class="fas fa-burn loader-icon"></i>';
+        default: return '<i class="fas fa-puzzle-piece loader-icon"></i>';
+      }
+    }
+    
+    function isFavorited(id) {
+      return favorites.some(mod => mod.id === id);
+    }
+    
+    function toggleFavorite(mod) {
+      const index = favorites.findIndex(m => m.id === mod.id);
+      const star = document.querySelector(`.favorite-btn[data-id="${mod.id}"]`);
+      
+      if (index === -1) {
+        favorites.push(mod);
+        showNotification('Добавлено в избранное');
+        if (star) {
+          star.classList.add('active', 'star-animation');
+          setTimeout(() => star.classList.remove('star-animation'), 800);
+        }
+      } else {
+        favorites.splice(index, 1);
+        showNotification('Удалено из избранное');
+        if (star) star.classList.remove('active');
+      }
+      
+      localStorage.setItem('mcFavorites', JSON.stringify(favorites));
+      
+      if (document.getElementById('favoritesContentTab').classList.contains('active')) {
+        showFavorites();
+      } else {
+        renderMods(window.currentMods);
+      }
+    }
+    
+    async function translateDescription(text, id) {
+      if (!text || text.length < 10) return text;
+      
+      if (translationsCache[text]) {
+        return translationsCache[text];
+      }
+      
+      try {
+        const btn = document.querySelector(`.translate-btn[data-id="${id}"]`);
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Перевод...';
+          btn.classList.add('translate-loading');
+        }
+        
+        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ru`);
+        
+        if (!response.ok) throw new Error('Translation API error');
+        
+        const data = await response.json();
+        
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-language"></i> Оригинал';
+          btn.classList.remove('translate-loading');
+        }
+        
+        if (data && data.responseData && data.responseData.translatedText) {
+          const translatedText = data.responseData.translatedText;
+          translationsCache[text] = translatedText;
+          return translatedText;
+        }
+        return text;
+      } catch (error) {
+        console.error('Translation error:', error);
+        const btn = document.querySelector(`.translate-btn[data-id="${id}"]`);
+        if (btn) {
+          btn.innerHTML = '<i class="fas fa-language"></i> Перевести';
+          btn.classList.remove('translate-loading');
+        }
+        return text;
+      }
+    }
+    
+    function renderMods(mods) {
+      if (!mods || mods.length === 0) {
+        resultsContainer.innerHTML = `
+          <div class="bg-card rounded-xl p-10 text-center border border-dashed border-primary/30">
+            <i class="fas fa-box-open text-5xl text-primary/50 mb-4"></i>
+            <h3 class="text-xl font-bold mb-2 text-gray-300">Ничего не найдено</h3>
+            <p class="text-gray-400 mb-4">Попробуйте изменить параметры поиска</p>
+          </div>
+        `;
+        return;
+      }
+      
+      let html = '';
+      
+      mods.forEach(mod => {
+        const versions = mod.versions ? mod.versions.slice(0, 3) : [];
+        const isFav = isFavorited(mod.id);
+        const loaders = mod.loaders || [];
+        const likes = mod.follows ? formatNumber(mod.follows) : '0';
+        const hasDescription = mod.description && mod.description.length > 10;
+        
+        html += `
+          <div class="mod-card overflow-hidden">
+            <div class="favorite-btn ${isFav ? 'active' : ''}" data-id="${mod.id}">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="card-badge ${getBadgeClass(mod.project_type)}">
+              ${getBadgeText(mod.project_type)}
+            </div>
+            <div class="card-image">
+              ${mod.icon_url 
+                ? `<img src="${mod.icon_url}?format=webp&width=400" alt="${mod.title}">` 
+                : `<div class="image-placeholder">
+                    <div>${mod.title}</div>
+                   </div>`}
+            </div>
+            <div class="p-4">
+              <a href="${mod.page_url}" target="_blank" class="text-lg font-bold mb-2 text-white hover:text-primary block">${mod.title}</a>
+              <p class="text-gray-400 text-sm mb-3 line-clamp-2 desc-text" id="desc-${mod.id}">${mod.description || 'Описание отсутствует'}</p>
+              
+              <div class="flex flex-wrap gap-3 mb-3">
+                <div class="flex items-center text-xs">
+                  <i class="fas fa-download text-primary mr-1"></i>
+                  <span>${formatNumber(mod.downloads)}</span>
+                </div>
+                <div class="flex items-center text-xs">
+                  <i class="fas fa-calendar text-primary mr-1"></i>
+                  <span>${formatDate(mod.date_modified)}</span>
+                </div>
+                <div class="flex items-center text-xs">
+                  <i class="fas fa-heart text-primary mr-1"></i>
+                  <span>${likes}</span>
+                </div>
+              </div>
+              
+              <div class="flex flex-wrap gap-1 mb-3">
+                ${versions.map(version => `
+                  <span class="version-tag"><i class="fas fa-cube"></i>${version}</span>
+                `).join('')}
+                ${mod.versions && mod.versions.length > 3 ? `<span class="version-tag">+${mod.versions.length - 3}</span>` : ''}
+              </div>
+              
+              <div class="flex flex-wrap gap-1">
+                ${loaders.map(loader => `
+                  <span class="loader-tag ${getLoaderClass(loader)}">
+                    ${getLoaderIcon(loader)}${getLoaderName(loader)}
+                  </span>
+                `).join('')}
+              </div>
+              
+              <div class="flex flex-col gap-3 mt-4">
+                ${hasDescription ? `
+                  <button class="btn-translate translate-btn" data-id="${mod.id}" data-original="${mod.description}">
+                    <i class="fas fa-language mr-2"></i> Перевести описание
+                  </button>
+                ` : ''}
+                <button class="btn-primary download-btn py-2 rounded-lg font-medium text-white flex items-center justify-center" data-id="${mod.id}">
+                  <i class="fas fa-download mr-2"></i> Скачать
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      
+      resultsContainer.innerHTML = html;
+      
+      document.querySelectorAll('.favorite-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          const mod = window.currentMods.find(m => m.id === id);
+          if (mod) toggleFavorite(mod);
+        });
+      });
+      
+      document.querySelectorAll('.download-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          currentMod = window.currentMods.find(m => m.id === id);
+          if (currentMod) openDownloadModal(currentMod);
+        });
+      });
+      
+      document.querySelectorAll('.translate-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const id = this.getAttribute('data-id');
+          const originalText = this.getAttribute('data-original');
+          const descElement = document.getElementById(`desc-${id}`);
+          
+          if (this.textContent.includes('Перевести')) {
+            const translatedText = await translateDescription(originalText, id);
+            descElement.textContent = translatedText;
+            this.innerHTML = '<i class="fas fa-language mr-2"></i> Оригинал';
+          } else {
+            descElement.textContent = originalText;
+            this.innerHTML = '<i class="fas fa-language mr-2"></i> Перевести описание';
+          }
+        });
+      });
+    }
+    
+    async function openDownloadModal(mod) {
+      modTitle.textContent = mod.title;
+      versionsList.innerHTML = '';
+      dependenciesList.innerHTML = '<div class="text-center py-4 text-gray-400">Загрузка данных...</div>';
+      
+      const loader = document.createElement('div');
+      loader.className = 'flex justify-center py-4';
+      loader.innerHTML = '<div class="loader-spinner"></div>';
+      versionsList.appendChild(loader);
+      
+      downloadModal.classList.add('open');
+      
+      try {
+        const response = await fetch(`https://api.modrinth.com/v2/project/${mod.id}/version`, {
+          headers: {
+            'User-Agent': 'CobaltModSearch/1.0.0'
+          }
+        });
+        
+        if (!response.ok) throw new Error('API error');
+        
+        const data = await response.json();
+        versionsList.innerHTML = '';
+        
+        data.forEach(version => {
+          const versionItem = document.createElement('div');
+          versionItem.className = 'version-item';
+          versionItem.innerHTML = `
+            <div class="font-medium">${version.name}</div>
+            <div class="text-xs text-gray-400 mt-1">Minecraft: ${version.game_versions.join(', ')}</div>
+            <div class="text-xs text-gray-400">${new Date(version.date_published).toLocaleDateString()}</div>
+          `;
+          
+          versionItem.addEventListener('click', () => {
+            document.querySelectorAll('.version-item').forEach(item => {
+              item.classList.remove('bg-primary/20');
+            });
+            versionItem.classList.add('bg-primary/20');
+            
+            downloadUrl = version.files[0].url;
+            currentVersionData = version;
+            updateDependencies(version);
+            updateModLoaders(version);
+          });
+          
+          versionsList.appendChild(versionItem);
+        });
+        
+        if (data.length > 0) {
+          versionsList.firstChild.classList.add('bg-primary/20');
+          downloadUrl = data[0].files[0].url;
+          currentVersionData = data[0];
+          updateDependencies(data[0]);
+          updateModLoaders(data[0]);
+        }
+      } catch (error) {
+        versionsList.innerHTML = '<div class="text-center py-4 text-gray-400">Ошибка загрузки версий</div>';
+      }
+    }
+    
+    function updateModLoaders(version) {
+      modLoaderSelect.innerHTML = '';
+      
+      if (!version.loaders || version.loaders.length === 0) {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'Не требуется';
+        modLoaderSelect.appendChild(option);
+        return;
+      }
+      
+      version.loaders.forEach(loader => {
+        const option = document.createElement('option');
+        option.value = loader;
+        option.textContent = getLoaderName(loader);
+        modLoaderSelect.appendChild(option);
+      });
+    }
+    
+    async function getProjectInfo(projectId) {
+      try {
+        const response = await fetch(`https://api.modrinth.com/v2/project/${projectId}`, {
+          headers: {
+            'User-Agent': 'CobaltModSearch/1.0.0'
+          }
+        });
+        
+        if (!response.ok) return null;
+        
+        const data = await response.json();
+        return {
+          title: data.title,
+          page_url: `https://modrinth.com/${data.project_type}/${data.slug}`
+        };
+      } catch (error) {
+        console.error('Error fetching project info:', error);
+        return null;
+      }
+    }
+    
+    async function updateDependencies(version) {
+      dependenciesList.innerHTML = '<div class="text-center py-4 text-gray-400">Загрузка зависимостей...</div>';
+      
+      if (!version.dependencies || version.dependencies.length === 0) {
+        dependenciesList.innerHTML = '<div class="text-center py-4 text-gray-400">Нет зависимостей</div>';
+        dependencies = [];
+        return;
+      }
+      
+      dependencies = version.dependencies;
+      
+      dependenciesList.innerHTML = '';
+      
+      for (const dep of dependencies) {
+        const depItem = document.createElement('div');
+        depItem.className = 'dependency-item';
+        
+        depItem.innerHTML = `
+          <div class="flex items-center">
+            <div class="loader-spinner-small"></div>
+            <span class="ml-2">Загрузка...</span>
+          </div>
+        `;
+        
+        dependenciesList.appendChild(depItem);
+        
+        const projectInfo = await getProjectInfo(dep.project_id);
+        
+        depItem.innerHTML = `
+          <a href="${projectInfo ? projectInfo.page_url : '#'}" 
+             target="_blank"
+             class="dependency-name"
+             title="Открыть страницу зависимости">
+            ${projectInfo ? projectInfo.title : dep.project_id}
+          </a>
+          <div class="flex items-center">
+            <span class="${dep.dependency_type === 'required' ? 'dependency-required' : 'dependency-optional'}">
+              ${dep.dependency_type === 'required' ? 'Обязательная' : 'Опциональная'}
+            </span>
+            <button class="dependency-btn download-dependency" data-id="${dep.project_id}">
+              <i class="fas fa-download"></i> Скачать
+            </button>
+          </div>
+        `;
+        
+        const downloadBtn = depItem.querySelector('.download-dependency');
+        downloadBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          const projectId = e.currentTarget.getAttribute('data-id');
+          
+          try {
+            const response = await fetch(`https://api.modrinth.com/v2/project/${projectId}/version`, {
+              headers: {
+                'User-Agent': 'CobaltModSearch/1.0.0'
+              }
+            });
+            
+            if (!response.ok) throw new Error('API error');
+            
+            const versions = await response.json();
+            if (versions.length > 0) {
+              const latestVersion = versions[0];
+              const downloadUrl = latestVersion.files[0].url;
+              
+              const fileName = downloadUrl.split('/').pop();
+              const link = document.createElement('a');
+              link.href = downloadUrl;
+              link.download = fileName;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              
+              showNotification(`Скачивание зависимости: ${projectInfo.title}`);
+            }
+          } catch (error) {
+            showNotification('Ошибка при скачивании зависимости');
+          }
+        });
+      }
+    }
+    
+    async function downloadMod() {
+      if (!downloadUrl) {
+        showNotification('Ошибка: не выбрана версия для скачивания');
+        return;
+      }
+      
+      const fileName = downloadUrl.split('/').pop();
+      const modName = currentMod ? currentMod.title : fileName;
+      
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      if (dependencies.length > 0) {
+        showNotification('Скачивание началось! Не забудьте скачать зависимости.');
+      } else {
+        showNotification('Скачивание началось!');
+      }
+      
+      downloadModal.classList.remove('open');
+    }
+    
+    function showLoading() {
+      resultsContainer.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-10">
+          <div class="loader-spinner"></div>
+          <p class="mt-4 text-gray-300">Поиск контента...</p>
+        </div>
+      `;
+    }
+    
+    function updatePagination() {
+      let html = '';
+      const maxPages = 5;
+      
+      html += `<div class="page-btn" id="prevPage"><i class="fas fa-chevron-left pagination-icon"></i></div>`;
+      
+      let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+      let endPage = startPage + maxPages - 1;
+      
+      if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = Math.max(1, endPage - maxPages + 1);
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        html += `<div class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">
+          <i class="fas fa-cube mr-1"></i>${i}
+        </div>`;
+      }
+      
+      html += `<div class="page-btn" id="nextPage"><i class="fas fa-chevron-right pagination-icon"></i></div>`;
+      
+      pagination.innerHTML = html;
+      
+      document.querySelectorAll('.page-btn[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentPage = parseInt(btn.dataset.page);
+          searchMods();
+        });
+      });
+      
+      document.getElementById('prevPage')?.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          searchMods();
+        }
+      });
+      
+      document.getElementById('nextPage')?.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          searchMods();
+        }
+      });
+    }
+    
+    async function searchMods() {
+      showLoading();
+      
+      const query = searchInput.value.trim();
+      const type = document.getElementById('contentType').value;
+      const version = document.getElementById('mcVersion').value;
+      currentLoader = document.getElementById('modLoader').value;
+      
+      const params = new URLSearchParams();
+      params.append('query', query || '');
+      params.append('limit', '8');
+      params.append('offset', (currentPage - 1) * 8);
+      params.append('index', currentSort);
+      
+      const facets = [];
+      
+      if (type) {
+        facets.push(`["project_type:${type}"]`);
+      }
+      
+      if (version) {
+        facets.push(`["versions:${version}"]`);
+      }
+      
+      if (currentLoader) {
+        facets.push(`["categories:${currentLoader}"]`);
+      }
+      
+      if (facets.length > 0) {
+        params.append('facets', `[${facets.join(',')}]`);
+      }
+      
+      try {
+        const response = await fetch(`https://api.modrinth.com/v2/search?${params.toString()}`, {
+          headers: {
+            'User-Agent': 'CobaltModSearch/1.0.0'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        const mods = data.hits.map(mod => ({
+          id: mod.project_id,
+          title: mod.title,
+          description: mod.description,
+          icon_url: mod.icon_url,
+          author: mod.author,
+          downloads: mod.downloads,
+          follows: mod.follows,
+          date_modified: mod.date_modified,
+          project_type: mod.project_type,
+          versions: mod.versions,
+          loaders: mod.categories,
+          page_url: `https://modrinth.com/${mod.project_type}/${mod.slug}`
+        }));
+        
+        window.currentMods = mods;
+        
+        resultsCounter.textContent = data.total_hits;
+        totalPages = Math.ceil(data.total_hits / 8);
+        renderMods(mods);
+        updatePagination();
+        
+        if (mods.length > 0) {
+          showNotification(`Найдено ${data.total_hits} результатов по вашему запросу`);
+        }
+      } catch (error) {
+        resultsContainer.innerHTML = `
+          <div class="bg-card rounded-xl p-10 text-center border border-dashed border-primary/30">
+            <i class="fas fa-exclamation-triangle text-5xl text-yellow-500 mb-4"></i>
+            <h3 class="text-xl font-bold mb-2 text-gray-300">Ошибка при поиске</h3>
+            <p class="text-gray-400 mb-4">Попробуйте повторить запрос позже</p>
+          </div>
+        `;
+        pagination.innerHTML = '';
+        resultsCounter.textContent = '0';
+        showNotification('Произошла ошибка при поиске модов');
+      }
+    }
+    
+    async function getTrendingContent() {
+      showLoading();
+      resultsTitle.textContent = 'Популярное сейчас';
+      resultsCounter.textContent = '';
+      
+      try {
+        const params = new URLSearchParams();
+        params.append('limit', '8');
+        params.append('index', 'downloads');
+        
+        const response = await fetch(`https://api.modrinth.com/v2/search?${params.toString()}`, {
+          headers: {
+            'User-Agent': 'CobaltModSearch/1.0.0'
+          }
+        });
+        
+        if (!response.ok) throw new Error('API error');
+        
+        const data = await response.json();
+        const mods = data.hits.map(mod => ({
+          id: mod.project_id,
+          title: mod.title,
+          description: mod.description,
+          icon_url: mod.icon_url,
+          author: mod.author,
+          downloads: mod.downloads,
+          follows: mod.follows,
+          date_modified: mod.date_modified,
+          project_type: mod.project_type,
+          versions: mod.versions,
+          loaders: mod.categories,
+          page_url: `https://modrinth.com/${mod.project_type}/${mod.slug}`
+        }));
+        
+        window.currentMods = mods;
+        renderMods(mods);
+        pagination.innerHTML = '';
+        resultsCounter.textContent = mods.length;
+        showNotification('Загружены популярные моды');
+      } catch (error) {
+        resultsContainer.innerHTML = `
+          <div class="bg-card rounded-xl p-10 text-center border border-dashed border-primary/30">
+            <i class="fas fa-exclamation-triangle text-5xl text-yellow-500 mb-4"></i>
+            <h3 class="text-xl font-bold mb-2 text-gray-300">Ошибка загрузки</h3>
+            <p class="text-gray-400 mb-4">Не удалось загрузить популярные моды</p>
+          </div>
+        `;
+        pagination.innerHTML = '';
+        resultsCounter.textContent = '0';
+        showNotification('Ошибка загрузки популярного контента');
+      }
+    }
+    
+    function showFavorites() {
+      if (favorites.length === 0) {
+        resultsContainer.innerHTML = `
+          <div class="bg-card rounded-xl p-10 text-center border border-dashed border-primary/30">
+            <i class="fas fa-heart text-5xl text-red-500 mb-4"></i>
+            <h3 class="text-xl font-bold mb-2 text-gray-300">Избранное пусто</h3>
+            <p class="text-gray-400 mb-4">Добавьте моды в избранное, нажимая на звёздочку</p>
+          </div>
+        `;
+        pagination.innerHTML = '';
+        resultsCounter.textContent = '0';
+        return;
+      }
+      
+      resultsCounter.textContent = favorites.length;
+      resultsTitle.textContent = 'Избранное';
+      window.currentMods = favorites;
+      renderMods(favorites);
+      pagination.innerHTML = '';
+    }
+    
+    function resetSearch() {
+      searchInput.value = '';
+      document.getElementById('contentType').value = 'mod';
+      document.getElementById('mcVersion').value = '1.20.1';
+      document.getElementById('modLoader').value = '';
+      currentPage = 1;
+      currentSort = 'relevance';
+      resultsTitle.textContent = 'Результаты поиска';
+      
+      sortButtons.forEach(btn => {
+        if (btn.dataset.sort === 'relevance') {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      resultsContainer.innerHTML = `
+        <div class="bg-card rounded-xl p-10 text-center border border-dashed border-primary/30">
+          <div class="text-5xl text-primary/50 mb-4">
+            <i class="fas fa-cube"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-gray-300">Начните поиск модов</h3>
+          <p class="text-gray-400 mb-4">Введите запрос в поле выше, чтобы найти моды, ресурспаки и шейдеры</p>
+        </div>
+      `;
+      pagination.innerHTML = '';
+      resultsCounter.textContent = '0';
+    }
+    
+    function addMessage(message, isUser = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+      messageDiv.textContent = message;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    const botDatabase = {
+      mods: {
+        "оптимизация": [
+          "Sodium - Оптимизация рендеринга для Fabric",
+          "OptiFine - Оптимизация графики и HD текстуры",
+          "Lithium - Оптимизация игровых механик",
+          "Phosphor - Оптимизация освещения",
+          "FerriteCore - Снижает использование памяти",
+          "LazyDFU - Ускоряет загрузку игры",
+          "Starlight - Переписывает систему освещения",
+          "Entity Culling - Оптимизация рендеринга сущностей",
+          "Cull Leaves - Оптимизация рендеринга листвы",
+          "FastFurnace - Ускоряет работу печей",
+          "Rubidium - Оптимизация для Forge",
+          "Magnesium - Портирует Sodium на Forge",
+          "Radium - Дополнительная оптимизация для Fabric",
+          "Krypton - Оптимизация сетевых взаимодействий",
+          "Lazydfu - Ускоряет загрузку мира",
+          "ModernFix - Улучшает производительность на Forge",
+          "ServerCore - Оптимизация серверов",
+          "Better FPS - Улучшение производительности",
+          "Clumps - Объединение опыта в один шар",
+          "FastWorkbench - Ускорение работы верстака",
+          "Get It Together, Drops! - Оптимизация дропа",
+          "Smooth Boot - Плавная загрузка игры",
+          "Canary - Предотвращение лагов",
+          "Memory Leak Fix - Исправление утечек памяти",
+          "AI Improvements - Улучшение ИИ мобов",
+          "FastSuite - Ускорение работы рецептов",
+          "Fastload - Ускорение загрузки модов",
+          "CensoredASM - Улучшение производительности",
+          "Dynamic View - Динамическая дальность прорисовки",
+          "FastChest - Оптимизация сундуков",
+          "Alternate Current - Оптимизация редстоуна",
+          "Ksyxis - Ускорение загрузки мира",
+          "LazyDFU - Оптимизация загрузки данных"
+        ],
+        "геймплей": [
+          "Biomes O' Plenty - Добавляет 80+ новых биомов",
+          "Tinkers' Construct - Расширенная система создания инструментов",
+          "Pam's HarvestCraft - Расширенное сельское хозяйство",
+          "Alex's Mobs - Добавляет 50+ новых мобов",
+          "Twilight Forest - Новое измерение с приключениями",
+          "Ice and Fire - Драконы и мифические существа",
+          "Waystones - Система быстрого перемещения",
+          "Apotheosis - Улучшенная система зачарований",
+          "Create - Инженерные механизмы и автоматизация",
+          "Mowzie's Mobs - Уникальные мобы с продвинутой анимацией",
+          "Decorative Blocks - Декоративные блоки",
+          "Aquaculture 2 - Улучшенная рыбалка",
+          "Dynamic Trees - Реалистичные растущие деревья",
+          "Tetra - Модульная система инструментов",
+          "Guard Villagers - Охранники для деревень",
+          "Spice of Life - Необходимость разнообразия в еде",
+          "TerraBlender - Улучшенная генерация биомов",
+          "Oh The Biomes You'll Go - Путешествие по биомам",
+          "Alex's Caves - Новые пещерные системы",
+          "Dungeons Enhanced - Улучшенные подземелья",
+          "AdventureZ - Новые боссы и приключения",
+          "Waystones - Портал-камни для телепортации",
+          "Champions - Улучшенные мобы с уровнями",
+          "Guard Villagers - Охранники деревень",
+          "Spider 2.0 - Улучшенные пауки",
+          "Zombie Awareness - Умные зомби",
+          "Better Animals Plus - Улучшенные животные",
+          "Vault Hunters - Охота за сокровищами",
+          "Better Combat - Улучшенный бой",
+          "Artifacts - Коллекционные артефакты",
+          "Corail Tombstone - Система могил после смерти",
+          "Waystones - Система телепортации",
+          "Grappling Hook - Крюк-кошка для перемещения",
+          "Dungeon Crawl - Рогаликовые подземелья"
+        ],
+        "технические": [
+          "Applied Energistics 2 - Системы хранения энергии",
+          "IndustrialCraft 2 - Промышленные машины и генераторы",
+          "Thermal Expansion - Энергия, транспорт жидкостей",
+          "Mekanism - Современные технологии и обработка ресурсов",
+          "Ender IO - Многоблочные структуры и кабели",
+          "BuildCraft - Трубопроводы и автоматизация",
+          "Immersive Engineering - Реалистичные механизмы",
+          "Refined Storage - Современная система хранения",
+          "RFTools - Инструменты для автоматизации",
+          "Computercraft - Программирование на Lua в Minecraft",
+          "Industrial Foregoing - Промышленная автоматизация",
+          "Cyclic - Разнообразные механизмы",
+          "Ranged Pumps - Насосы для жидкостей",
+          "XNet - Продвинутая система кабелей",
+          "Integrated Dynamics - Программируемая логика",
+          "Simple Storage Network - Простое сетевое хранилище",
+          "Engineer's Decor - Декоративные технические блоки",
+          "Create - Механизмы и автоматизация",
+          "Mekanism Generators - Генераторы энергии",
+          "Thermal Innovation - Инновационные устройства",
+          "RFTools Control - Программируемая автоматизация",
+          "Mekanism Tools - Инструменты и броня",
+          "Advanced Peripherals - Дополнительные периферийные устройства",
+          "CC: Tweaked - Улучшенный Computercraft",
+          "Integrated Tunnels - Транспортировка предметов",
+          "Compact Machines - Компактные машины",
+          "Modular Routers - Модульные маршрутизаторы",
+          "Flux Networks - Сеть передачи энергии",
+          "LaserIO - Транспортировка предметов лазерами",
+          "Pipez - Универсальные трубы",
+          "Sophisticated Storage - Улучшенное хранение",
+          "Pretty Pipes - Красивые трубопроводы",
+          "Storage Drawers - Система ящиков для хранения"
+        ],
+        "магия": [
+          "Thaumcraft - Исследование магии и алхимии",
+          "Botania - Магия природы и цветов",
+          "Blood Magic - Ритуальная магия с использованием крови",
+          "Ars Nouveau - Современная система заклинаний",
+          "Astral Sorcery - Магия звезд и созвездий",
+          "Electroblob's Wizardry - Система заклинаний и волшебства",
+          "Mahou Tsukai - Магия в стиле аниме",
+          "Psi - Программируемая магия",
+          "Mana and Artifice - Комплексная магическая система",
+          "Occultism - Ритуалы и призывание существ",
+          "Forbidden and Arcanus - Запретная магия",
+          "Ars Creo - Создание магических конструкций",
+          "Elemental Craft - Магия стихий",
+          "Malum - Тёмная ритуальная магия",
+          "Hexcasting - Гексагональная магическая система",
+          "Reliquary - Магические реликвии",
+          "Soul Magic - Магия душ",
+          "Ars Elemental - Магия стихий",
+          "Spellblade Next - Магические мечи",
+          "Wizardry - Система заклинаний",
+          "Mana Gear - Магическая экипировка",
+          "Corail Tombstone - Магия смерти",
+          "Nature's Aura - Аура природы",
+          "Eidolon - Магия духов",
+          "Totemic - Ритуальная магия тотемов",
+          "ChromatiCraft - Цветная магия",
+          "Witchery - Ведьмовство",
+          "Ars Magica - Система заклинаний",
+          "Mystical Agriculture - Магическое сельское хозяйство",
+          "Essence - Система магических сущностей",
+          "Blood Arsenal - Дополнение к Blood Magic",
+          "Electroblob's Wizardry - Расширенная магия",
+          "Mana and Artifice - Продвинутая магия"
+        ],
+        "строительство": [
+          "Chisel - Множество новых вариантов блоков",
+          "Carpenter's Blocks - Декоративные блоки",
+          "Decocraft - Декоративные предметы",
+          "Bibliocraft - Мебель и полки для книг",
+          "MrCrayfish's Furniture Mod - Мебель и предметы интерьера",
+          "Builders Crafts & Additions - Современные строительные блоки",
+          "Blockcraftery - Наклонные и другие декоративные блоки",
+          "LittleTiles - Маленькие декоративные плитки",
+          "Chisels & Bits - Создание своих блоков из битов",
+          "WorldEdit - Инструмент для строительства",
+          "Macaw's Bridges - Разнообразные мосты",
+          "Macaw's Windows - Окна и витражи",
+          "Macaw's Roofs - Разнообразные крыши",
+          "Decorative Blocks - Декоративные блоки",
+          "Supplementaries - Дополнительные декоративные элементы",
+          "Adorn - Простая мебель и декор",
+          "FramedBlocks - Декоративные рамки для блоков",
+          "Building Gadgets - Инструменты для строительства",
+          "Create Deco - Декорации для Create",
+          "Connected Glass - Связное стекло",
+          "Dramatic Doors - Эффектные двери",
+          "Fairy Lights - Декоративные гирлянды",
+          "Extended Lights - Расширенные источники света",
+          "Exotic Blocks - Экзотические блоки",
+          "Decorative Blocks - Дополнительные декоративные блоки",
+          "Valhelsia Structures - Структуры для строительства",
+          "Supplementaries - Дополнительные элементы",
+          "ArchitectureCraft - Продвинутые строительные инструменты",
+          "Blockus - Стилизованные блоки",
+          "Decorative Blocks Addon - Дополнения для декора",
+          "Chipped - Больше вариантов блоков",
+          "Block Carpentry - Строительные блоки",
+          "Decorative Blocks - Коллекция декоративных блоков"
+        ]
+      },
+      resourcepacks: {
+        "реализм": [
+          "LB Photo Realism - Фотореалистичные текстуры",
+          "Realistico - Высокодетализированные текстуры",
+          "SEUS Renewed - Реалистичные материалы и эффекты",
+          "Napp - Физически корректные текстуры",
+          "ModernArch - Современная архитектура",
+          "Stratum - Реалистичные текстуры с PBR",
+          "Realistic Adventure - Реализм для приключений",
+          "Minecraft Realistic - Классический реализм",
+          "UMSOEA - Ультра-реалистичные текстуры",
+          "Rex's Realism - Натуральные текстуры",
+          "Newb X - Фотореалистичный пак",
+          "Real Source - Реалистичные ресурсы",
+          "Definitive Realism - Высококачественный реализм",
+          "Realism Mats - Физические материалы",
+          "Voxel Photorealistic - Воксельный реализм",
+          "Physical Beauty - Реалистичная красота",
+          "True Realism - Истинный реализм",
+          "Patrix - Реалистичные текстуры",
+          "Realistico - Высококачественный реализм",
+          "R3D Craft - Реалистичные текстуры",
+          "Misa's Realistic - Реалистичный пак",
+          "Realism Mats - Физические материалы",
+          "Defined PBR - PBR текстуры",
+          "Realistic World - Реалистичный мир",
+          "Nostalgia Shader - Реалистичные шейдеры",
+          "Continuum - Кинематографичная графика",
+          "Kappa - Реалистичные материалы",
+          "Real Source 2 - Продвинутый реализм",
+          "Physically Based - Физически корректные материалы",
+          "Ultimate Immersion - Полное погружение",
+          "Stratum Resource Pack - Реалистичные PBR текстуры",
+          "Realistic Adventure - Приключенческий реализм",
+          "Natura - Реалистичная природа"
+        ],
+        "стилизованные": [
+          "Faithful - Классические текстуры в 32x",
+          "Sphax PureBDCraft - Стиль комиксов",
+          "Jolicraft - Уютный пиксельный стиль",
+          "Mizuno's 16 Craft - Японский аниме стиль",
+          "Luna HD - Сказочный стиль с мягкими цветами",
+          "Dokucraft - Темный фэнтезийный стиль",
+          "Soartex Fanver - Чистый и минималистичный",
+          "John Smith Legacy - Средневековый стиль",
+          "R3D CRAFT - Реализм в стилизованной манере",
+          "Misa's Realistic - Стилизованный реализм",
+          "Pixel Perfection - Пиксельное совершенство",
+          "Anemoia - Ностальгический стиль",
+          "Rustic - Деревенский стиль",
+          "Cocricot - Японский стиль",
+          "Brixel - Стиль Lego",
+          "Paper Cut-out - Бумажный стиль",
+          "VanillaBDcraft - Ванильный стиль комиксов",
+          "Coterie Craft - Стилизованный средневековый",
+          "Bloom - Яркий и красочный",
+          "Mythic - Мифический стиль",
+          "Eldpack - Фэнтезийный стиль",
+          "Rustic Redemption - Деревенское возрождение",
+          "Chroma Hills - Фэнтезийный стиль",
+          "Conquest - Реалистичный фэнтези",
+          "Jicklus - Стилизованный реализм",
+          "Bare Bones - Минималистичный стиль",
+          "Ravenheart - Темный фэнтези",
+          "Cocricot Lite - Упрощенный японский стиль",
+          "ModernArch Lite - Легкий современный стиль",
+          "Fantasy Realm - Королевство фэнтези",
+          "Painterly Pack - Художественный стиль",
+          "Dandelion - Яркий и красочный",
+          "Mizuno 16 Craft - Аниме стиль"
+        ],
+        "pvp": [
+          "Tightfault Revamp - Оптимизированный для PvP",
+          "TimeDeo 2k Pack - Популярный среди стримеров",
+          "SammyGreen - Чистый и контрастный",
+          "RKYFault - Четкие контуры и яркие цвета",
+          "Huahwi Pack - Минималистичный стиль",
+          "Aqua Rose - Контрастный стиль для PvP",
+          "Latenci - Оптимизированный для скорости",
+          "Pulse - Яркий и контрастный",
+          "VenoCraft - Стиль для PvP и скорости",
+          "Shark - Чистый и функциональный",
+          "Hive - Для серверов Hive",
+          "Prestige - Премиум стиль для PvP",
+          "Skyline - Четкие границы блоков",
+          "Revamp - Переработанный PvP пак",
+          "Prism - Яркие и контрастные текстуры",
+          "RusherHack - Для клиента RusherHack",
+          "Lemon - Четкие и контрастные текстуры",
+          "Fade - Контрастный PvP пак",
+          "Flame - Яркий PvP пак",
+          "Vertex - Современный PvP пак",
+          "Sapphire - Синий PvP пак",
+          "Amethyst - Фиолетовый PvP пак",
+          "Ruby - Красный PvP пак",
+          "Emerald - Зеленый PvP пак",
+          "Diamond - Белый PvP пак",
+          "Gold - Золотой PvP пак",
+          "Platinum - Платиновый PvP пак",
+          "Cyanide - Быстрый PvP пак",
+          "Inferno - Огненный PvP пак",
+          "Arctic - Ледяной PvP пак",
+          "Velocity - Для скоростного PvP",
+          "Nebula - Космический PvP пак",
+          "Solar - Солнечный PvP пак"
+        ],
+        "ctm": [
+          "Connected Textures - Поддержка CTM",
+          "Faithful 32x CTM - Ванильный стиль с CTM",
+          "Soartex Fanver CTM - Чистый стиль с CTM",
+          "Unity - Единый стиль с CTM",
+          "Dokucraft CTM - Темный фэнтези с CTM",
+          "ModernArch CTM - Современная архитектура с CTM",
+          "Conquest - Реализм с CTM",
+          "BDcraft CTM - Стиль комиксов с CTM",
+          "John Smith CTM - Средневековый стиль с CTM",
+          "R3D Craft CTM - Реализм с CTM",
+          "Excalibur - Фэнтези с CTM",
+          "Lithos - Каменные текстуры с CTM",
+          "Rustic CTM - Деревенский стиль с CTM",
+          "Vader - Темный стиль с CTM",
+          "Brixel CTM - Lego стиль с CTM",
+          "Cocricot CTM - Японский стиль с CTM",
+          "Paper Cut-out CTM - Бумажный стиль с CTM",
+          "CTM Enhanced - Улучшенный CTM",
+          "CTM Vanilla - Ванильный CTM",
+          "CTM Fantasy - Фэнтези CTM",
+          "CTM Modern - Современный CTM",
+          "CTM Medieval - Средневековый CTM",
+          "CTM Realism - Реалистичный CTM",
+          "CTM Sci-Fi - Научно-фантастический CTM",
+          "CTM Adventure - Приключенческий CTM",
+          "CTM Magic - Магический CTM",
+          "CTM Nature - Природный CTM",
+          "CTM Future - Футуристический CTM",
+          "CTM Retro - Ретро стиль CTM",
+          "CTM Abstract - Абстрактный CTM",
+          "CTM Industrial - Индустриальный CTM",
+          "CTM Fantasy Realms - Королевства фэнтези",
+          "CTM Pixel Art - Пиксельный стиль"
+        ]
+      },
+      datapacks: {
+        "качество жизни": [
+          "Multiplayer Sleep - Спать при одном игроке",
+          "Armor Statues - Статуи с броней",
+          "Double Shulker Shells - Двойные ракушки шалкера",
+          "Player Head Drops - Голова игрока при смерти",
+          "Coordinates HUD - Отображение координат на экране",
+          "Nether Portal Coords - Сохранение координат при переходе",
+          "Track Statistics - Расширенная статистика",
+          "Customizable Armor Stands - Настраиваемые манекены",
+          "Vein Miner - Добыча целых жил руды",
+          "Tree Capitator - Срубка целых деревьев",
+          "Fast Leaf Decay - Быстрое опадание листьев",
+          "Silence Mobs - Заглушить звуки мобов",
+          "More Mob Heads - Головы всех мобов",
+          "Anti Enderman Grief - Защита от эндерменов",
+          "Universal Dyeing - Красить любые блоки",
+          "Custom Nether Portals - Настраиваемые порталы",
+          "Terralith - Генерация новых биомов",
+          "Backpack - Рюкзаки для переноски вещей",
+          "Ender Chest - Общие эндер сундуки",
+          "Wandering Trader - Улучшенный торговец",
+          "Villager Workstations - Рабочие места жителей",
+          "Better Spawners - Улучшенные спавнеры",
+          "Graves - Могилы при смерти",
+          "Fast Leaf Decay - Быстрое опадание листьев",
+          "Silence Mobs - Заглушить звуки мобов",
+          "Anti Creeper Grief - Защита от криперов",
+          "More Beds - Больше кроватей",
+          "Silence Guardians - Заглушить стражей",
+          "Silence Phantoms - Заглушить фантомов",
+          "Auto Replant - Автоматическая посадка",
+          "Fast Path - Быстрое создание тропинок",
+          "Better Elytra - Улучшенное использование элитр",
+          "Silence Bats - Заглушить летучих мышей"
+        ],
+        "сложность": [
+          "Hardcore Darkness - Полная темнота ночью",
+          "Tough Mobs - Мобы становятся сильнее",
+          "Graves - Могилы с вещами после смерти",
+          "Hardcore Questing Mode - Система квестов",
+          "Epic Fight - Продвинутая система боя",
+          "Spice of Life - Необходимость разнообразной пищи",
+          "Hostile Worlds - Усиленные мобы в других измерениях",
+          "Scaling Health - Увеличивающаяся сложность",
+          "Stamina System - Система выносливости",
+          "Better Combat - Улучшенный бой",
+          "Dynamic Difficulty - Динамическая сложность",
+          "Survival Island - Островное выживание",
+          "Blood Moon - Кровавая луна",
+          "Infernal Mobs - Инфернальные мобы",
+          "Roguelike Dungeons - Рогаликовые подземелья",
+          "Zombie Awareness - Умные зомби",
+          "Harder Mobs - Сложные мобы",
+          "Better Combat - Улучшенный бой",
+          "Epic Siege - Осады мобов",
+          "Hardcore Death - Жесткая смерть",
+          "Better Nether - Улучшенный ад",
+          "Better End - Улучшенный край",
+          "Dungeon Crawl - Подземелья",
+          "Infernal Mobs - Инфернальные мобы",
+          "Mob Health Bars - Бары здоровья мобов",
+          "Realistic Torches - Реалистичные факелы",
+          "Survival Plus - Улучшенное выживание",
+          "Hostile Worlds - Враждебные миры",
+          "Epic Raids - Эпичные рейды",
+          "Brutal Bosses - Жестокие боссы",
+          "Realistic Nights - Реалистичные ночи",
+          "Hardcore Torches - Ограниченное использование факелов",
+          "Dynamic Difficulty - Адаптивная сложность"
+        ],
+        "автоматизация": [
+          "Auto Crafting Table - Автоматический крафт",
+          "Tree Harvester - Автосбор деревьев",
+          "Auto Smelt - Автоплавка",
+          "Mob Grinder - Автоубийца мобов",
+          "Crop Harvester - Автосбор урожая",
+          "Auto Fishing - Автоматическая рыбалка",
+          "Auto Breeder - Авторазведение животных",
+          "Auto Furnace - Автопечь",
+          "Auto Composter - Авто компостер",
+          "Auto Enchanter - Автозачарование",
+          "Auto Anvil - Автоматическая наковальня",
+          "Auto Brewing - Авто варка зелий",
+          "Auto Stone Cutter - Авто каменщик",
+          "Auto Villager - Авто торговля с жителями",
+          "Auto Smithing - Авто кузнец",
+          "Auto Loom - Авто ткацкий станок",
+          "Auto Grindstone - Авто точило",
+          "Auto Crafter - Автоматический крафт",
+          "Auto Farmer - Авто фермер",
+          "Auto Miner - Авто шахтер",
+          "Auto Fisher - Авто рыбак",
+          "Auto Butcher - Авто мясник",
+          "Auto Planter - Авто сажатель",
+          "Auto Shear - Авто стрижка овец",
+          "Auto Milker - Авто доение",
+          "Auto Honey - Авто сбор меда",
+          "Auto Composter - Авто компостирование",
+          "Auto Smoker - Авто коптильня",
+          "Auto Blast Furnace - Авто плавильня",
+          "Auto Crafter Advanced - Продвинутый автокрафт",
+          "Auto Fisher Advanced - Продвинутая рыбалка",
+          "Auto Tree Farm - Автоматическая ферма деревьев",
+          "Auto Crop Farm - Автоматическая ферма растений"
+        ]
+      },
+      shaders: {
+        "реализм": [
+          "SEUS PTGI - Патч-трассировка лучей",
+          "Continuum - Кинематографичная графика",
+          "Kappa - Реалистичные материалы и свет",
+          "Nostalgia - Реалистичный вантовый шейдер",
+          "Molly VX - Реализм с эффектами объемного света",
+          "Waving Plants - Реалистичная анимация растений",
+          "Rethinking Voxels - Улучшенный реализм",
+          "Triliton's Shaders - Реалистичные эффекты",
+          "Soft Voxels - Мягкое освещение и тени",
+          "AstraLex - Реалистичное небо и облака",
+          "Project LUMA - Фотореализм",
+          "TME - Реалистичная атмосфера",
+          "Voyager - Реалистичное пространство",
+          "Radiant - Реалистичное освещение",
+          "Brixel - Реалистичные материалы",
+          "Stratum - Физически корректные материалы",
+          "UMSOEA - Ультрареализм",
+          "Path Traced Shaders - Трассировка путей",
+          "Continuum RT - Реалистичная трассировка",
+          "SEUS Renewed - Обновленный реализм",
+          "KappaPT - Трассировка путей",
+          "Nostalgia - Реалистичный вантовый",
+          "Rethinking Voxels - Переосмысленные воксели",
+          "Soft Voxels Lite - Легкий реализм",
+          "AstraLex Shaders - Реалистичные облака",
+          "Project LUMA - Фотореализм",
+          "TME Shaders - Атмосферный реализм",
+          "Sonic Ether - Реалистичное освещение",
+          "Chocapic RT - Трассировка лучей",
+          "BSL RT - Реалистичная трассировка",
+          "Path Traced - Трассировка путей",
+          "RTX ON - Имитация RTX",
+          "Photorealistic - Фотореалистичная графика"
+        ],
+        "стиль": [
+          "BSL Shaders - Баланс красоты и производительности",
+          "Sildur's Vibrant - Яркие и насыщенные цвета",
+          "Chocapic13 - Настраиваемые и легкие",
+          "Complementary - Улучшенная версия BSL",
+          "Vanilla Plus - Улучшенная ванильная графика",
+          "Naelego's Cel Shaders - Стиль мультфильма",
+          "Prismarine - Подводный стиль",
+          "RRe36's Shaders - Сбалансированный стиль",
+          "MakeUp - Быстрые и стильные",
+          "SFLP Shaders - Легкие и красивые",
+          "AstraLex - Стилизованный реализм",
+          "Chocapic13 Toaster - Стильный и легкий",
+          "Triliton's Lite - Стилизованные эффекты",
+          "Vanilla Plus - Улучшенная ваниль",
+          "Prism - Яркий и красочный",
+          "Radiant - Стильное освещение",
+          "Starlight - Звездный стиль",
+          "Sildur's Enhanced - Улучшенные цвета",
+          "BSL Edit - Редактируемый BSL",
+          "Complementary Reimagined - Переосмысленный",
+          "Chocapic13 Extreme - Экстремальный стиль",
+          "MakeUp Ultra - Ультра стиль",
+          "SFLP Ultra - Ультра легкий",
+          "AstraLex Lite - Легкий стилизованный",
+          "NostalgiaVX - Стильный вантовый",
+          "Rethinking Voxels Lite - Легкий стиль",
+          "Starlight Lite - Легкий звездный",
+          "Sildur's Fantasy - Фэнтезийный стиль",
+          "Chocapic Fantasy - Магический стиль",
+          "BSL Fantasy - Фэнтезийная графика",
+          "Voyager Lite - Легкий космический стиль",
+          "Celestial - Небесный стиль",
+          "Aurora - Стиль северного сияния"
+        ],
+        "легкие": [
+          "Sildur's Enhanced Default - Улучшенная ваниль",
+          "Chocapic13 Lite - Легкие шейдеры",
+          "BSL Lite - Упрощенная версия BSL",
+          "MakeUp Ultra Fast - Сверхлегкие шейдеры",
+          "Complementary Reimagined - Оптимизированная версия",
+          "Iris - Легкие шейдеры для Fabric",
+          "Oculus - Легкие шейдеры для Forge",
+          "SFLP - Супер легкие шейдеры",
+          "Vanilla Plus Lite - Легкая ваниль",
+          "RRe36's Lite - Сбалансированные легкие",
+          "Chocapic13 Low - Минимальные требования",
+          "BSL Very Low - Очень легкая версия",
+          "MakeUp Minimal - Минималистичные шейдеры",
+          "Complementary Unbound - Легкая версия",
+          "Iris & Sodium - Оптимизированные шейдеры",
+          "Oculus & Rubidium - Легкие для Forge",
+          "Starlight Lite - Легкие звездные эффекты",
+          "Sildur's Basic - Базовые шейдеры",
+          "Chocapic13 Low - Низкие настройки",
+          "BSL Low - Низкая нагрузка",
+          "MakeUp Fast - Быстрые шейдеры",
+          "Complementary Light - Легкие шейдеры",
+          "Iris Light - Легкие для Fabric",
+          "Oculus Light - Легкие для Forge",
+          "SFLP Light - Супер легкие",
+          "Vanilla Plus Light - Легкая ваниль",
+          "RRe36's Light - Легкие шейдеры",
+          "Chocapic13 Mobile - Для мобильных устройств",
+          "BSL Mobile - Мобильная версия",
+          "MakeUp Mobile - Для слабых устройств",
+          "OptiFine Internal - Встроенные в OptiFine",
+          "Fast Graphics - Быстрая графика",
+          "Smooth Shaders - Плавные шейдеры"
+        ]
+      }
+    };
+    
+    function handleUserMessage(message) {
+      message = message.toLowerCase();
+      
+      if (message.includes('привет') || message.includes('здравствуй') || message.includes('хай')) {
+        addMessage('Привет! Я помогу тебе с модами, ресурспаками и шейдерами для Minecraft. Что тебя интересует?');
+        return;
+      }
+      
+      if (message.includes('помощь') || message.includes('команды')) {
+        addMessage('Я могу помочь с:\n- Поиском модов по категориям\n- Рекомендациями ресурспаков\n- Настройкой шейдеров\n- Установкой контента\n\nСпроси: "Моды для оптимизации", "Ресурспаки в стиле комиксов", "Шейдеры для слабого ПК" и т.д.');
+        return;
+      }
+      
+      if (message.includes('мод') || message.includes('моды')) {
+        if (message.includes('оптим') || message.includes('фпс') || message.includes('производительность')) {
+          showModsList('оптимизация');
+          return;
+        }
+        if (message.includes('геймплей') || message.includes('игровой процесс') || message.includes('новый контент')) {
+          showModsList('геймплей');
+          return;
+        }
+        if (message.includes('технич') || message.includes('автоматизация') || message.includes('машины')) {
+          showModsList('технические');
+          return;
+        }
+        if (message.includes('маги') || message.includes('ритуал') || message.includes('заклинани')) {
+          showModsList('магия');
+          return;
+        }
+        if (message.includes('строител') || message.includes('декор') || message.includes('блоки')) {
+          showModsList('строительство');
+          return;
+        }
+        
+        addMessage('Какие моды тебя интересуют? Например:\n- Оптимизация\n- Новый геймплей\n- Технические моды\n- Магия\n- Строительство');
+        return;
+      }
+      
+      if (message.includes('ресурспак') || message.includes('текстур') || message.includes('rp')) {
+        if (message.includes('реализм') || message.includes('реалистич')) {
+          showResourcepacksList('реализм');
+          return;
+        }
+        if (message.includes('стиль') || message.includes('комикс') || message.includes('пиксель')) {
+          showResourcepacksList('стилизованные');
+          return;
+        }
+        if (message.includes('pvp') || message.includes('пвп')) {
+          showResourcepacksList('pvp');
+          return;
+        }
+        if (message.includes('ctm') || message.includes('связанные текстуры')) {
+          showResourcepacksList('ctm');
+          return;
+        }
+        
+        addMessage('Какие ресурспаки тебя интересуют? Например:\n- Реалистичные\n- В стиле комиксов\n- Для PvP\n- CTM текстуры');
+        return;
+      }
+      
+      if (message.includes('датапак') || message.includes('dp')) {
+        if (message.includes('качество') || message.includes('удобство') || message.includes('жизни')) {
+          showDatapacksList('качество жизни');
+          return;
+        }
+        if (message.includes('сложн') || message.includes('хардкор')) {
+          showDatapacksList('сложность');
+          return;
+        }
+        if (message.includes('автоматизац') || message.includes('авто')) {
+          showDatapacksList('автоматизация');
+          return;
+        }
+        
+        addMessage('Какие датапаки тебя интересуют? Например:\n- Для улучшения качества жизни\n- Повышающие сложность\n- Автоматизация');
+        return;
+      }
+      
+      if (message.includes('шейдер') || message.includes('shader') || message.includes('график')) {
+        if (message.includes('реализм') || message.includes('реалистич') || message.includes('кино')) {
+          showShadersList('реализм');
+          return;
+        }
+        if (message.includes('стиль') || message.includes('красив') || message.includes('ярк')) {
+          showShadersList('стиль');
+          return;
+        }
+        if (message.includes('легк') || message.includes('слабый') || message.includes('оптим')) {
+          showShadersList('легкие');
+          return;
+        }
+        
+        addMessage('Какие шейдеры тебя интересуют? Например:\n- Реалистичные\n- Стильные и красивые\n- Легкие для слабых ПК');
+        return;
+      }
+      
+      if (message.includes('установить') || message.includes('инструкция') || message.includes('как поставить')) {
+        addMessage('Чтобы установить мод/ресурспак/шейдер:\n1. Скачайте нужный файл\n2. Откройте папку .minecraft\n3. Поместите файл в папку:\n   - Моды → /mods\n   - Ресурспаки → /resourcepacks\n   - Шейдеры → /shaderpacks\n4. Запустите игру и активируйте в настройках');
+        return;
+      }
+      
+      if (message.includes('совместимость') || message.includes('конфликт')) {
+        addMessage('Для проверки совместимости модов:\n1. Убедитесь, что все моды для одной версии Minecraft\n2. Используйте одинаковый модлоадер (Forge/Fabric)\n3. Проверьте требования зависимостей\n4. Ищите информацию на страницах модов\n5. Тестируйте по одному новому моду за раз');
+        return;
+      }
+      
+      if (message.includes('оптимизация') || message.includes('фпс') || message.includes('лагает')) {
+        addMessage('Для оптимизации Minecraft:\n1. Установите моды: Sodium, Lithium, Starlight\n2. Используйте легкие шейдеры\n3. Уменьшите настройки графики\n4. Выделите больше RAM в лаунчере\n5. Закройте фоновые приложения\n6. Обновите драйверы видеокарты');
+        return;
+      }
+      
+      if (message.includes('сборк') || message.includes('модпак')) {
+        addMessage('Популярные сборки модов:\n1. All The Mods - Большая коллекция\n2. RLCraft - Сложный хардкор\n3. SkyFactory - Небесные острова\n4. Tekkit - Технические моды\n5. Hexxit - Приключенческая\n6. SevTech Ages - Развитие через эпохи\n7. Enigmatica - Сбалансированная\n8. FTB Infinity - Все в одном\n9. Agrarian Skies - Небесные фермы\n10. Pixelmon - Покемоны в Minecraft');
+        return;
+      }
+      
+      if (message.includes('спасибо') || message.includes('благодарю')) {
+        addMessage('Всегда пожалуйста! Обращайтесь, если понадобится помощь. Удачной игры! 😊');
+        return;
+      }
+      
+      addMessage('Извините, я не понял ваш вопрос. Вы можете спросить о модах, ресурспаках или шейдерах для Minecraft. Или напишите "помощь" для списка команд.');
+    }
+    
+    function showModsList(category) {
+      if (!botDatabase.mods[category]) {
+        addMessage(`Извините, категория "${category}" не найдена.`);
+        return;
+      }
+      
+      const mods = botDatabase.mods[category];
+      let response = `Лучшие моды в категории "${category}":\n`;
+      
+      mods.forEach((mod, index) => {
+        response += `\n${index + 1}. ${mod}`;
+      });
+      
+      response += `\n\nВы можете найти их на нашем сайте через поиск.`;
+      addMessage(response);
+    }
+    
+    function showResourcepacksList(category) {
+      if (!botDatabase.resourcepacks[category]) {
+        addMessage(`Извините, категория "${category}" не найдена.`);
+        return;
+      }
+      
+      const packs = botDatabase.resourcepacks[category];
+      let response = `Лучшие ресурспаки в категории "${category}":\n`;
+      
+      packs.forEach((pack, index) => {
+        response += `\n${index + 1}. ${pack}`;
+      });
+      
+      response += `\n\nВы можете найти их на нашем сайте через поиск.`;
+      addMessage(response);
+    }
+    
+    function showDatapacksList(category) {
+      if (!botDatabase.datapacks[category]) {
+        addMessage(`Извините, категория "${category}" не найдена.`);
+        return;
+      }
+      
+      const packs = botDatabase.datapacks[category];
+      let response = `Лучшие датапаки в категории "${category}":\n`;
+      
+      packs.forEach((pack, index) => {
+        response += `\n${index + 1}. ${pack}`;
+      });
+      
+      response += `\n\nВы можете найти их на нашем сайте через поиск.`;
+      addMessage(response);
+    }
+    
+    function showShadersList(category) {
+      if (!botDatabase.shaders[category]) {
+        addMessage(`Извините, категория "${category}" не найдена.`);
+        return;
+      }
+      
+      const shaders = botDatabase.shaders[category];
+      let response = `Лучшие шейдеры в категории "${category}":\n`;
+      
+      shaders.forEach((shader, index) => {
+        response += `\n${index + 1}. ${shader}`;
+      });
+      
+      response += `\n\nВы можете найти их на нашем сайте через поиск.`;
+      addMessage(response);
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      searchBtn.addEventListener('click', function() {
+        searchTab.classList.add('active');
+        favoritesContentTab.classList.remove('active');
+        trendingTab.classList.remove('active');
+        resultsTitle.textContent = 'Результаты поиска';
+        currentPage = 1;
+        searchMods();
+      });
+      
+      resetBtn.addEventListener('click', resetSearch);
+      
+      searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          searchTab.classList.add('active');
+          favoritesContentTab.classList.remove('active');
+          trendingTab.classList.remove('active');
+          resultsTitle.textContent = 'Результаты поиска';
+          currentPage = 1;
+          searchMods();
+        }
+      });
+      
+      sortButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          sortButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentSort = btn.dataset.sort;
+          currentPage = 1;
+          searchMods();
+        });
+      });
+      
+      favoritesContentTab.addEventListener('click', function(e) {
+        e.preventDefault();
+        searchTab.classList.remove('active');
+        trendingTab.classList.remove('active');
+        this.classList.add('active');
+        showFavorites();
+      });
+      
+      trendingTab.addEventListener('click', function(e) {
+        e.preventDefault();
+        searchTab.classList.remove('active');
+        favoritesContentTab.classList.remove('active');
+        this.classList.add('active');
+        getTrendingContent();
+      });
+      
+      searchTab.addEventListener('click', function(e) {
+        e.preventDefault();
+        this.classList.add('active');
+        favoritesContentTab.classList.remove('active');
+        trendingTab.classList.remove('active');
+        resultsTitle.textContent = 'Результаты поиска';
+        if (searchInput.value) {
+          searchMods();
+        } else {
+          resetSearch();
+        }
+      });
+      
+      chatBotBtn.addEventListener('click', function() {
+        chatContainer.classList.toggle('open');
+      });
+      
+      sendMessageBtn.addEventListener('click', function() {
+        if (chatInput.value.trim() !== '') {
+          addMessage(chatInput.value, true);
+          handleUserMessage(chatInput.value);
+          chatInput.value = '';
+        }
+      });
+      
+      chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && chatInput.value.trim() !== '') {
+          addMessage(chatInput.value, true);
+          handleUserMessage(chatInput.value);
+          chatInput.value = '';
+        }
+      });
+      
+      closeModal.addEventListener('click', function() {
+        downloadModal.classList.remove('open');
+      });
+      
+      downloadBtn.addEventListener('click', downloadMod);
+      
+      document.addEventListener('click', function(e) {
+        if (downloadModal.classList.contains('open') && 
+            e.target === downloadModal) {
+          downloadModal.classList.remove('open');
+        }
+      });
+      
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('chat-btn')) {
+          const query = e.target.getAttribute('data-query');
+          addMessage(query, true);
+          handleUserMessage(query);
+        }
+      });
+      
+      getTrendingContent();
+    });
+  </script>
+</body>
+</html>
