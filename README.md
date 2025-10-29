@@ -14,6 +14,7 @@
 - **🖼 Иконки скачать** https://m1r0tv0rets.github.io/Lazurit/icon.html
 - **📦 Моды майнкрафт** https://m1r0tv0rets.github.io/Lazurit/mods.html
 - **🖋 Редакторы текста майнкрафт** https://m1r0tv0rets.github.io/Lazurit/mine_text.html
+- **🧮 Калькулятор** https://m1r0tv0rets.github.io/Lazurit/calculator.html
 
 ## 🌟 Особенности проекта
 
