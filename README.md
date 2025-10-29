@@ -15,7 +15,7 @@
 - **📦 Моды майнкрафт** https://m1r0tv0rets.github.io/Lazurit/mods.html
 - **🖋 Редакторы текста майнкрафт** https://m1r0tv0rets.github.io/Lazurit/mine_text.html
 - **🧮 Калькулятор** https://m1r0tv0rets.github.io/Lazurit/calculator.html
-- **🔍 Калькулятор** https://m1r0tv0rets.github.io/Lazurit/wiki_search.html
+- **🔍 Поисковик Вики** https://m1r0tv0rets.github.io/Lazurit/wiki_search.html
 
 ## 🌟 Особенности проекта
 
