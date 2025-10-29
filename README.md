@@ -16,6 +16,7 @@
 - **🖋 Редакторы текста майнкрафт** https://m1r0tv0rets.github.io/Lazurit/mine_text.html
 - **🧮 Калькулятор** https://m1r0tv0rets.github.io/Lazurit/calculator.html
 - **🔍 Поисковик Вики** https://m1r0tv0rets.github.io/Lazurit/wiki_search.html
+- **🥒 Измеритель огурца** https://m1r0tv0rets.github.io/Lazurit/cucumber.html
 
 ## 🌟 Особенности проекта
 
