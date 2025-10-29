@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cobalt Assistant</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" href="Images/icon.png">
+  <link rel="icon" href="images/icon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script>
     tailwind.config = {
@@ -42,32 +42,6 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
-    }
-    
-    .sticky-header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(10px);
-      background: rgba(15, 23, 42, 0.85);
-    }
-    
-    .burger-line {
-      height: 2px;
-      width: 25px;
-      background: white;
-      margin: 5px auto;
-      transition: all 0.3s ease;
-    }
-    
-    .mobile-menu {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease-out;
-    }
-    
-    .mobile-menu.open {
-      max-height: 300px;
     }
     
     .chat-container {
@@ -315,44 +289,6 @@
 </head>
 <body class="bg-dark text-gray-200">
 
-  <header class="bg-gray-950 shadow-md sticky-header">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-      <div class="flex items-center">
-        <h1 class="text-xl font-bold text-white">🤖 Cobalt Assistant</h1>
-      </div>
-      
-      <nav class="hidden md:flex space-x-6">
-        <a href="index.html" class="py-3 hover:text-primary transition-colors">Главная</a> 
-        <a href="news.html" class="py-3 hover:text-primary transition-colors">Новости</a>
-        <a href="help.html" class="py-3 hover:text-primary transition-colors">Поддержка</a>
-        <a href="tools.html" class="py-3 hover:text-primary transition-colors">Инструменты</a>
-        <a href="libraly.html" class="py-3 hover:text-primary transition-colors">Библиотека</a>
-        <a href="wiki.html" class="py-3 hover:text-primary transition-colors">Вики</a>
-        <a href="projects.html" class="py-3 hover:text-primary transition-colors">Проекты</a>
-        <a href="https://t.me/atlantis_studio_chat" class="py-3 hover:text-primary transition-colors">Сообщество</a>
-      </nav>
-      
-      <button id="burgerBtn" class="md:hidden text-white focus:outline-none">
-        <div class="burger-line"></div>
-        <div class="burger-line"></div>
-        <div class="burger-line"></div>
-      </button>
-    </div>
-    
-    <div id="mobileMenu" class="mobile-menu bg-gray-950 md:hidden">
-      <div class="flex flex-col px-4 pb-3">
-        <a href="index.html" class="py-3 hover:text-primary transition-colors">Главная</a> 
-        <a href="news.html" class="py-3 hover:text-primary transition-colors">Новости</a>
-        <a href="help.html" class="py-3 hover:text-primary transition-colors">Поддержка</a>
-        <a href="tools.html" class="py-3 hover:text-primary transition-colors">Инструменты</a>
-        <a href="libraly.html" class="py-3 hover:text-primary transition-colors">Библиотека</a>
-        <a href="wiki.html" class="py-3 hover:text-primary transition-colors">Вики</a>
-        <a href="projects.html" class="py-3 hover:text-primary transition-colors">Проекты</a>
-        <a href="https://t.me/atlantis_studio_chat" class="py-3 hover:text-primary transition-colors">Сообщество</a>
-      </div>
-    </div>
-  </header>
-
   <main class="flex-grow">
     <div class="chat-container">
       <div class="chat-messages" id="chatMessages">
@@ -377,7 +313,7 @@
             </div>
           </div>
           
-          <div class="knowledge-card" onclick="sendMessage('Сетевая игра')">
+          <div class="knowledge-card" onclick="sendMessage('Сеть')">
             <div class="flex flex-col items-center">
               <i class="fas fa-network-wired text-green-300 mb-1"></i>
               <span>Сеть</span>
@@ -442,14 +378,14 @@
           
           <div class="knowledge-card" onclick="sendMessage('Quilt')">
             <div class="flex flex-col items-center">
-              <i class="fas fa-blanket text-pink-300 mb-1"></i>
+              <i class="fas fa-books text-pink-300 mb-1"></i>
               <span>Quilt</span>
             </div>
           </div>
           
           <div class="knowledge-card" onclick="sendMessage('NeoForge')">
             <div class="flex flex-col items-center">
-              <i class="fas fa-rabbit text-teal-300 mb-1"></i>
+              <i class="fas fa-fox text-teal-300 mb-1"></i>
               <span>NeoForge</span>
             </div>
           </div>
@@ -504,10 +440,6 @@
       <i class="fas fa-arrow-down text-blue-300 text-sm"></i>
     </button>
   </main>
-
-  <footer class="bg-gray-950 py-4 text-center text-gray-500 text-xs">
-    © 2025 Atlantis Studio. Все права защищены.
-  </footer>
 
   <script>
     window.addEventListener('scroll', function() {
@@ -653,12 +585,10 @@
         "моджо лаунчер": "MojoLauncher лаунчер созданный ArtDev. Он хорошо оптимизирован и гибко настраиваемый. У лаунчера дружелюбное комъюнити. Ссылка: https://t.me/mojolauncher_chat",
         "pojavlaucnner": "К сожалению этот лаунчер закрыт. Но есть его аналог MojoLauncher созданный ArtDev. Он хорошо оптимизирован и гибко настраиваемый. У лаунчера дружелюбное комъюнити. Ссылка: https://t.me/mojolauncher_chat",
         "миротворец": "Главный дизайнер лаунчера также отвечает за веб составлющию тоясть сайт. Контакт: https://t.me/M1rotv0rets",
-        "dick": "🍆 Бот для измерения баклажанов в Телеграм! Автор: Nos0k Юзернейм бота: @Dickmetrsuperbot?",
-        "дик": "🍆 Бот для измерения баклажанов в Телеграм! Автор: Nos0k Юзернейм бота: @Dickmetrsuperbot?",
-        "dickbot": "🍆 Бот для измерения баклажанов в Телеграм! Автор: Nos0k Юзернейм бота: @Dickmetrsuperbot",
-        "дикбот": "🍆 Бот для измерения баклажанов в Телеграм! Автор: Nos0k Юзернейм бота: @Dickmetrsuperbot",
         "ева": "Ебучий транс убивший PojavLauncher.",
         "eva": "Ебучий транс убивший PojavLauncher.",
+        "осуждаю": "Твою мать",
+        "окак": "Тебя забрали в детдом Окак.",
         
         "скины": `
           <div class="info-card">
@@ -727,7 +657,7 @@
           </div>
         `,
         
-        "сетевая игра": `
+        "сеть": `
           <div class="info-card">
             <h3 class="font-bold text-blue-300 mb-2">Сетевая игра</h3>
             <div class="tab-widget">
